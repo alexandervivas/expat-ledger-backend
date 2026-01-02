@@ -1,4 +1,4 @@
-package com.expatledger.apigateway.routes
+package com.expatledger.api.routes
 
 import cats.effect.IO
 import munit.CatsEffectSuite

@@ -4,7 +4,7 @@ import os
 def render_backlog():
     backlog_dir = 'docs/backlog'
     output_file = 'BACKLOG.md'
-    
+
     if not os.path.exists(backlog_dir):
         print(f"Directory {backlog_dir} not found.")
         return

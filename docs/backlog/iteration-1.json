@@ -1,0 +1,57 @@
+{
+  "iteration": 1,
+  "name": "The Expat Identity",
+  "status": "in-progress",
+  "goal": "Implement Tenant and User onboarding with Skunk persistence and Outbox-based CloudEvent publishing.",
+  "tasks": [
+    {
+      "id": "T1.1",
+      "title": "Setup Skunk Persistence & Flyway",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Integrate Skunk and Flyway. Create schemas for 'tenant', 'tenant_tax_residency', and 'user'. Enforce UUID PKs and UTC timestamps."
+    },
+    {
+      "id": "T1.2",
+      "title": "Implement Outbox Pattern Infrastructure",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Create an 'outbox' table. Implement a base repository trait to save domain events atomically with domain entities using Skunk transactions."
+    },
+    {
+      "id": "T1.3",
+      "title": "Implement 'Onboard Tenant' Use Case",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Implement Hexagonal layers for Tenant creation. Logic must handle the initial tax residency and reporting currency selection."
+    },
+    {
+      "id": "T1.4",
+      "title": "Outbox Poller & CloudEvent Publisher",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Implement an fs2-based background stream in tenant-service to poll the outbox and publish Avro-encoded CloudEvents to RabbitMQ."
+    },
+    {
+      "id": "T1.5",
+      "title": "Tenant API gRPC & Gateway Bridge",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Expand tenant.proto with CreateTenant. Update api-gateway with a Tapir route to proxy the creation request to the service."
+    },
+    {
+      "id": "T1.6",
+      "title": "Persistence Integration Test (Testcontainers)",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Use Testcontainers-scala to verify that Tenants and their tax residencies are saved correctly and events appear in the outbox."
+    },
+    {
+      "id": "T1.7",
+      "title": "Consolidate Guidelines",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Consolidated .junierules and AGENTS.md into .junie/guidelines.md to establish a single source of truth for development agents."
+    }
+  ]
+}
