@@ -37,3 +37,6 @@ out/
 .git-hooks-cache/
 
 *.private.env.json
+
+target
+.bsp

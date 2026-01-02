@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package com.expatledger.tenant.v1;
+
+service TenantService {
+  rpc GetTenant (GetTenantRequest) returns (GetTenantResponse) {}
+}
+
+message GetTenantRequest {
+  string id = 1;
+}
+
+message GetTenantResponse {
+  string id = 1;
+  string name = 2;
+}

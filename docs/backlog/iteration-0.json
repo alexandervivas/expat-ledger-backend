@@ -6,7 +6,7 @@
     {
       "id": "T0.1",
       "title": "Setup multi-module sbt project structure",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Configure build.sbt with modules: shared-kernel, api-gateway, tenant-service. Integrate sbt-protoc for fs2-grpc and align with Cats Effect 3 ecosystem."
     },
