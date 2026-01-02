@@ -13,7 +13,7 @@
     {
       "id": "T0.2",
       "title": "Define 'Money' Opaque Types in Shared Kernel",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Implement type-safe currency and amount handling using Scala 3 Opaque Types or Iron. Ensure pure functional logic compatible with Cats Effect."
     },
