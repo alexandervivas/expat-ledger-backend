@@ -12,10 +12,10 @@ trait DomainEvent extends Event:
   def eventType: String
 
 case class OutboxEvent(
-    id: UUID,
+    override val id: UUID,
     aggregateType: String,
-    aggregateId: UUID,
+    override val aggregateId: UUID,
     eventType: String,
     payload: String, // Serialized JSON
-    occurredAt: OffsetDateTime
+    override val occurredAt: OffsetDateTime
 ) extends Event

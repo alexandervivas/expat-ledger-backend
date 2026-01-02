@@ -8,13 +8,13 @@ import skunk.codec.all.*
 import cats.effect.MonadCancelThrow
 
 trait OutboxRepository[F[_]]:
-  def save(event: OutboxEvent): Command[OutboxEvent]
+  def save(event: OutboxEvent): F[Unit]
 
   def saveAll(events: List[OutboxEvent]): F[Unit]
 
 private object SkunkOutboxRepository:
   private val encoder: Encoder[OutboxEvent] =
-    (uuid *: text *: uuid *: text *: text *: timestamptz).contramap { e =>
+    (uuid *: text *: uuid *: text *: text *: timestamptz).values.contramap { e =>
       e.id *: e.aggregateType *: e.aggregateId *: e.eventType *: e.payload *: e.occurredAt *: EmptyTuple
     }
 
@@ -25,7 +25,7 @@ private object SkunkOutboxRepository:
     """.command
 
   def insertMany(n: Int): Command[List[OutboxEvent]] = {
-    val encoderMany = encoder.values.list(n)
+    val encoderMany = encoder.list(n)
     sql"""
       INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload, occurred_at)
       VALUES ($encoderMany)
@@ -36,7 +36,8 @@ class SkunkOutboxRepository[F[_] : MonadCancelThrow](session: Session[F]) extend
 
   import SkunkOutboxRepository.*
 
-  override def save(event: OutboxEvent): Command[OutboxEvent] = insert
+  override def save(event: OutboxEvent): F[Unit] =
+    session.execute(insert)(event).void
 
   override def saveAll(events: List[OutboxEvent]): F[Unit] =
     events match
