@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "AccountUpdated",
+  "namespace": "banking.events.v1",
+  "fields": [
+    { "name": "tenantId", "type": "string" },
+    { "name": "accountId", "type": "string" },
+    { "name": "name", "type": "string" },
+    { "name": "type", "type": "string" },
+    { "name": "currency", "type": "string" },
+    { "name": "updatedAt", "type": "string" }
+  ]
+}

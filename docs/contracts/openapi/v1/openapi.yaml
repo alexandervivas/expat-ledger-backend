@@ -1,0 +1,511 @@
+openapi: 3.0.3
+info:
+  title: Personal Banking API
+  version: 1.0.0
+paths:
+  /v1/tenants:
+    get:
+      summary: List tenants
+      operationId: listTenants
+      responses:
+        "200":
+          description: A collection of tenants
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tenant"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+    post:
+      summary: Create tenant
+      operationId: createTenant
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TenantCreate"
+      responses:
+        "201":
+          description: Tenant created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "409":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/tenants/{tenantId}:
+    parameters:
+      - name: tenantId
+        in: path
+        required: true
+        description: Unique identifier of the tenant
+        schema:
+          type: string
+    get:
+      summary: Retrieve tenant
+      operationId: getTenant
+      responses:
+        "200":
+          description: The tenant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    put:
+      summary: Update tenant
+      operationId: updateTenant
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TenantUpdate"
+      responses:
+        "200":
+          description: Updated tenant
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tenant"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    delete:
+      summary: Delete tenant
+      operationId: deleteTenant
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: Tenant deleted
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/accounts:
+    get:
+      summary: List accounts
+      operationId: listAccounts
+      responses:
+        "200":
+          description: A collection of accounts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Account"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+    post:
+      summary: Create account
+      operationId: createAccount
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountCreate"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "409":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/accounts/{accountId}:
+    parameters:
+      - name: accountId
+        in: path
+        required: true
+        description: Unique identifier of the account
+        schema:
+          type: string
+    get:
+      summary: Retrieve account
+      operationId: getAccount
+      responses:
+        "200":
+          description: The account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    put:
+      summary: Update account
+      operationId: updateAccount
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountUpdate"
+      responses:
+        "200":
+          description: Updated account
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Account"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    delete:
+      summary: Delete account
+      operationId: deleteAccount
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: Account deleted
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/banks:
+    get:
+      summary: List banks
+      operationId: listBanks
+      responses:
+        "200":
+          description: A collection of banks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bank"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+    post:
+      summary: Create bank
+      operationId: createBank
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankCreate"
+      responses:
+        "201":
+          description: Bank created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bank"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "409":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/banks/{bankId}:
+    parameters:
+      - name: bankId
+        in: path
+        required: true
+        description: Unique identifier of the bank
+        schema:
+          type: string
+    get:
+      summary: Retrieve bank
+      operationId: getBank
+      responses:
+        "200":
+          description: The bank
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bank"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    put:
+      summary: Update bank
+      operationId: updateBank
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BankUpdate"
+      responses:
+        "200":
+          description: Updated bank
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bank"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    delete:
+      summary: Delete bank
+      operationId: deleteBank
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: Bank deleted
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/transactions:
+    get:
+      summary: List transactions
+      operationId: listTransactions
+      responses:
+        "200":
+          description: A collection of transactions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+    post:
+      summary: Create transaction
+      operationId: createTransaction
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionCreate"
+      responses:
+        "201":
+          description: Transaction created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "409":
+          $ref: "#/components/responses/ProblemResponse"
+  /v1/transactions/{transactionId}:
+    parameters:
+      - name: transactionId
+        in: path
+        required: true
+        description: Unique identifier of the transaction
+        schema:
+          type: string
+    get:
+      summary: Retrieve transaction
+      operationId: getTransaction
+      responses:
+        "200":
+          description: The transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    put:
+      summary: Update transaction
+      operationId: updateTransaction
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransactionUpdate"
+      responses:
+        "200":
+          description: Updated transaction
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Transaction"
+        "400":
+          $ref: "#/components/responses/ProblemResponse"
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+    delete:
+      summary: Delete transaction
+      operationId: deleteTransaction
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: Transaction deleted
+        "404":
+          $ref: "#/components/responses/ProblemResponse"
+components:
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Ensures the request can be retried safely.
+      schema:
+        type: string
+  responses:
+    ProblemResponse:
+      description: Problem Details response
+      content:
+        application/problem+json:
+          schema:
+            $ref: "#/components/schemas/Problem"
+  schemas:
+    Problem:
+      type: object
+      description: RFC7807 formatted problem details.
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string
+          format: uri
+      required:
+        - type
+        - title
+        - status
+    Tenant:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+    TenantCreate:
+      type: object
+      properties:
+        name:
+          type: string
+      required:
+        - name
+    TenantUpdate:
+      allOf:
+        - $ref: "#/components/schemas/TenantCreate"
+    Account:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        type:
+          type: string
+      required:
+        - id
+        - tenantId
+        - type
+    AccountCreate:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        type:
+          type: string
+      required:
+        - tenantId
+        - type
+    AccountUpdate:
+      allOf:
+        - $ref: "#/components/schemas/AccountCreate"
+    Bank:
+      type: object
+      properties:
+        id:
+          type: string
+        tenantId:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - tenantId
+        - name
+    BankCreate:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        name:
+          type: string
+      required:
+        - tenantId
+        - name
+    BankUpdate:
+      allOf:
+        - $ref: "#/components/schemas/BankCreate"
+    Transaction:
+      type: object
+      properties:
+        id:
+          type: string
+        accountId:
+          type: string
+        bankId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+      required:
+        - id
+        - accountId
+        - bankId
+        - amount
+        - currency
+    TransactionCreate:
+      type: object
+      properties:
+        accountId:
+          type: string
+        bankId:
+          type: string
+        amount:
+          type: number
+          format: double
+        currency:
+          type: string
+      required:
+        - accountId
+        - bankId
+        - amount
+        - currency
+    TransactionUpdate:
+      allOf:
+        - $ref: "#/components/schemas/TransactionCreate"

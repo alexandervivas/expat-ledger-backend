@@ -1,0 +1,48 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-yaml
+        exclude: ^mkdocs\.yml$
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: mixed-line-ending
+      - id: detect-private-key
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.45.0
+    hooks:
+      - id: markdownlint
+        args: ["--disable", "MD013"]
+
+  # Local hooks
+  - repo: local
+    hooks:
+      # google-java-format via local script (no mirror)
+      - id: google-java-format
+        name: google-java-format (local jar)
+        language: system
+        entry: scripts/google-java-format.sh
+        args: ["--aosp", "--replace"]
+        files: "^modules/.+\\.java$"
+
+      # Conventional Commits (local commit-msg hook)
+      - id: commitlint
+        name: commitlint (Conventional Commits)
+        language: node
+        entry: commitlint
+        args: ["--config", ".commitlintrc.cjs", "--edit"] # no $1 needed
+        pass_filenames: false # don't append COMMIT_EDITMSG
+        additional_dependencies:
+          - "@commitlint/cli@19.5.0"
+          - "@commitlint/config-conventional@19.5.0"
+        stages: [commit-msg]
+
+      # Prettier (node) for JSON / Markdown / YAML
+      - id: prettier
+        name: prettier (node)
+        language: node
+        entry: prettier --write
+        additional_dependencies:
+          - prettier@3.3.3
+        files: "\\.(json|md|yaml|yml)$"

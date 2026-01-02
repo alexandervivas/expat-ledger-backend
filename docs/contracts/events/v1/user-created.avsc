@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "UserCreated",
+  "namespace": "com.eureckah.banking.events.v1",
+  "doc": "Event emitted when a user is created",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "occurredAt", "type": "string", "doc": "ISO-8601 instant"},
+    {"name": "userId", "type": "string"},
+    {"name": "name", "type": "string"},
+    {"name": "email", "type": "string"}
+  ]
+}

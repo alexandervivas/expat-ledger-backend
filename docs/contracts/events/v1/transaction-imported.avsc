@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "TransactionImported",
+  "namespace": "banking.events.v1",
+  "fields": [
+    { "name": "tenantId", "type": "string" },
+    { "name": "accountId", "type": "string" },
+    { "name": "transactionId", "type": "string" },
+    { "name": "bankId", "type": "string" },
+    { "name": "sourceId", "type": "string" },
+    { "name": "bookingDate", "type": "string" },
+    { "name": "amount", "type": "double" },
+    { "name": "currency", "type": "string" }
+  ]
+}

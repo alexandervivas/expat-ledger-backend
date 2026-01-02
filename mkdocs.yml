@@ -1,0 +1,70 @@
+site_name: Personal Banking — Docs
+repo_name: eureckah/personal-banking-be-java
+repo_url: https://github.com/eureckah/personal-banking-be-java
+edit_uri: edit/main/docs
+
+nav:
+  - Overview: index.md
+  - Architecture:
+      - Context: architecture/c4-context.md
+      - Containers: architecture/c4-container.md
+      - ADRs Index: architecture/decisions/index.md
+  - Contracts:
+      - OpenAPI v1 Changelog: contracts/openapi/v1/CHANGELOG.md
+      - Events v1 Changelog: contracts/events/v1/CHANGELOG.md
+  - Governance:
+      - Scope CHANGELOG: governance/scope-CHANGELOG.md
+      - Product CHANGELOG: governance/product-CHANGELOG.md
+      - Security: governance/SECURITY.md
+      - SLOs & SLIs: governance/SLOs-SLIs.md
+      - Agents Operating Manual: governance/AGENTS.md
+  - UX:
+      - Stitch Prompt: ux/stitch-prompt.md
+  - Operations:
+      - Deployment (Render): ops/deployment-render.md
+
+theme:
+  name: material
+  language: en
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.tracking
+    - navigation.top
+    - toc.follow
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.tabbed
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+extra:
+  generator: false
+
+extra_javascript:
+  - javascripts/mermaid.mjs
