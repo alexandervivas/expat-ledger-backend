@@ -21,4 +21,5 @@
 | T1.5 | Tenant API gRPC & Gateway Bridge | ⏳ Todo | Junie |
 | T1.6 | Persistence Integration Test (Testcontainers) | ⏳ Todo | Junie |
 | T1.7 | Consolidate Guidelines | ✅ Done | Junie |
+| T1.8 | Rich Event Model Refactoring | ✅ Done | Junie |
 

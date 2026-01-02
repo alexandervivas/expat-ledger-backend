@@ -2,6 +2,10 @@
 
 ## 2026-01-02
 
+- Refactor internal event model in `shared-kernel` to improve type safety:
+  - Introduce `Event` trait with common fields: `id`, `aggregateId`, `occurredAt`.
+  - Redefine `DomainEvent` as a trait extending `Event`.
+  - Redefine `OutboxEvent` as a concrete case class extending `Event`.
 - Standardize namespaces to `com.expatledger.events.v1` for all event schemas.
 - Align `AccountUpdated` and `TransactionImported` with ADR-008 (CloudEvents):
   - Add `eventId` and `occurredAt` (ISO-8601 instant) fields.

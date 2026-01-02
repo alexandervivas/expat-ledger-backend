@@ -52,6 +52,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Consolidated .junierules and AGENTS.md into .junie/guidelines.md to establish a single source of truth for development agents."
+    },
+    {
+      "id": "T1.8",
+      "title": "Rich Event Model Refactoring",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Refactor events to use a base 'Event' trait and concrete case classes for 'DomainEvent' and 'OutboxEvent' to improve type safety and ergonomics."
     }
   ]
 }
