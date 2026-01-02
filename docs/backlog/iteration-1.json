@@ -82,11 +82,11 @@
       "description": "Corrected the invalid Python version 3.14.2 to 3.12.0 in .tool-versions and updated README to clarify Python's purpose."
     },
     {
-      "id": "T1.12",
-      "title": "Fix README.md broken links",
+      "id": "T1.13",
+      "title": "Optimize OutboxRepository saveAll performance",
       "status": "done",
       "owner": "Junie",
-      "description": "Replaced non-breaking hyphens with standard hyphens in README.md headers and Table of Contents to fix broken anchors."
+      "description": "Group chunks by size in saveAll to minimize prepare calls, typically to just one or two."
     }
   ]
 }
