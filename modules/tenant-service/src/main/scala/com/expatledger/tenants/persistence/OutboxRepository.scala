@@ -24,7 +24,7 @@ private object SkunkOutboxRepository:
       VALUES ($encoder)
     """.command
 
-  def insertMany(n: Int): Command[List[OutboxEvent]] = {
+  private def insertMany(n: Int): Command[List[OutboxEvent]] = {
     val encoderMany = encoder.list(n)
     sql"""
       INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload, occurred_at)
@@ -40,7 +40,6 @@ class SkunkOutboxRepository[F[_] : MonadCancelThrow](session: Session[F]) extend
     session.execute(insert)(event).void
 
   override def saveAll(events: List[OutboxEvent]): F[Unit] =
-    events match
-      case Nil => ().pure[F]
-      case _ =>
-        session.prepare(insertMany(events.size)).flatMap(_.execute(events)).void
+    events.grouped(500).toList.traverse_ { chunk =>
+      session.prepare(insertMany(chunk.size)).flatMap(_.execute(chunk)).void
+    }

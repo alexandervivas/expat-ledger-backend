@@ -21,8 +21,8 @@ A system born from the immigrant experience to manage accounts across home and h
 ## Table of Contents
 
 - [Development Environment](#development-environment)
-- [First‑time Setup](#first-time-setup)
-- [Day‑to‑day Commands](#day-to-day-commands)
+- [First-time Setup](#first-time-setup)
+- [Day-to-day Commands](#day-to-day-commands)
 - [Conventional Commits](#conventional-commits)
 - [Pull Request Template](#pull-request-template)
 - [Continuous Integration](#continuous-integration)
@@ -39,7 +39,8 @@ This repository contains the **API** only. Tooling and docs below reflect that.
 
 - **Scala 3.x**
 - **sbt** (Scala Build Tool)
-- **Python + pipx** (for `pre-commit`)
+- **Python ≥ 3.12** (for `pre-commit`, MkDocs, and backlog scripts)
+- **pipx** (recommended for installing `pre-commit` and `mkdocs`)
 - **Node.js ≥ 18** (for local Conventional Commits validation via `commitlint`)
 - (Optional) **Docker** for local infra (used in later iterations)
 
@@ -54,7 +55,7 @@ This repository contains the **API** only. Tooling and docs below reflect that.
 
 ---
 
-## First‑time Setup
+## First-time Setup
 
 Install the git hooks (runs once per machine):
 
@@ -73,7 +74,7 @@ make pre-commit-install
 
 ---
 
-## Day‑to‑day Commands
+## Day-to-day Commands
 
 The repo ships a minimal **Makefile** that wraps sbt and common hygiene tasks.
 

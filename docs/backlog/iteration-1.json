@@ -73,6 +73,20 @@
       "status": "done",
       "owner": "Junie",
       "description": "Refactor Repository to use DomainEvent.eventType instead of getClass.getSimpleName to avoid coupling with code structure."
+    },
+    {
+      "id": "T1.11",
+      "title": "Fix Python Version in .tool-versions",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Corrected the invalid Python version 3.14.2 to 3.12.0 in .tool-versions and updated README to clarify Python's purpose."
+    },
+    {
+      "id": "T1.12",
+      "title": "Fix README.md broken links",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Replaced non-breaking hyphens with standard hyphens in README.md headers and Table of Contents to fix broken anchors."
     }
   ]
 }

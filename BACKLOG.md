@@ -24,4 +24,6 @@
 | T1.8 | Rich Event Model Refactoring | ✅ Done | Junie |
 | T1.9 | Optimize Outbox Batch Inserts | ✅ Done | Junie |
 | T1.10 | Fix brittle eventType derivation | ✅ Done | Junie |
+| T1.11 | Fix Python Version in .tool-versions | ✅ Done | Junie |
+| T1.12 | Fix README.md broken links | ✅ Done | Junie |
 
