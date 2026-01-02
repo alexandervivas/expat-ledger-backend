@@ -27,9 +27,16 @@
     {
       "id": "T0.4",
       "title": "Docker Compose 'Expat Stack' v1",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Containerize Gateway and Tenant shell using sbt-native-packager. Configure networking and environment variables for service location (Env-based discovery)."
+    },
+    {
+      "id": "T0.5",
+      "title": "Enforce ip4s Host and Port Validation",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Transition all modules to use com.comcast.ip4s.Host and com.comcast.ip4s.Port for networking configurations, ensuring type safety and early validation."
     }
   ]
 }
