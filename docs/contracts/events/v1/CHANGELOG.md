@@ -1,5 +1,13 @@
 # Events v1 — CHANGELOG
 
+## 2026-01-02
+
+- Standardize namespaces to `com.expatledger.events.v1` for all event schemas.
+- Align `AccountUpdated` and `TransactionImported` with ADR-008 (CloudEvents):
+  - Add `eventId` and `occurredAt` (ISO-8601 instant) fields.
+  - Standardize metadata documentation.
+- Rename `updatedAt` to `occurredAt` in `AccountUpdated` for cross-event consistency.
+
 ## 2025-10-15
 
 - Introduce `tenant.created.v1` with fields: eventId, occurredAt, tenantId, name, ownerId. Reason: enable event-sourced projections and cross-service integration when a tenant is created.

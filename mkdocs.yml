@@ -1,6 +1,6 @@
-site_name: Personal Banking — Docs
-repo_name: eureckah/personal-banking-be-java
-repo_url: https://github.com/eureckah/personal-banking-be-java
+site_name: Expat Ledger — Docs
+repo_name: alexandervivas/expat-ledger-backend
+repo_url: https://github.com/alexandervivas/expat-ledger-backend
 edit_uri: edit/main/docs
 
 nav:

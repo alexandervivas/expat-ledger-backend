@@ -1,6 +1,6 @@
-# Personal Banking — Developer Docs
+# Expat Ledger — Developer Docs
 
-Welcome! This site documents the architecture, contracts, and governance for the Personal Banking project.
+Welcome! This site documents the architecture, contracts, and governance for the Expat Ledger project.
 
 ## Quick links
 

@@ -21,7 +21,7 @@ CloudEvents defines a small set of metadata attributes (id, source, type, specve
   - `ce_time` = RFC3339 timestamp — aligns with Avro field `occurredAt`
   - `ce_subject` = domain identifier relevant to the event (`tenantId` for tenant events, `userId` for user events)
   - `ce_datacontenttype` = `application/avro`
-  - `ce_dataschema` = URI identifying the schema. We use `urn:avro:schema:<full.avro.namespace.Name>` (e.g., `urn:avro:schema:com.eureckah.banking.events.v1.TenantCreated`).
+  - `ce_dataschema` = URI identifying the schema. We use `urn:avro:schema:<full.avro.namespace.Name>` (e.g., `urn:avro:schema:com.expatledger.events.v1.TenantCreated`).
 - Exchange strategy is unchanged: topic exchanges per event type (`events.v1.<event>`). Routing key remains configurable (default: `events`).
 
 ## Consequences

@@ -8,7 +8,7 @@ You are a senior product designer generating responsive, accessible web app UIs.
 
 Context
 
-- Product: Multi-tenant Personal Banking web app (Next.js frontend, Scala 3 backend).
+- Product: Multi-tenant Expat Ledger web app (Next.js frontend, Scala 3 backend).
 - Modules: tenant, users (RBAC OWNER/ADMIN/USER), accounts (CHECKING/SAVINGS), transactions (Excel ingestion), FX (USD/EUR/COP; historical conversions).
 - Key constraints: WCAG 2.1 AA, JSON-friendly UI copy (i18n-ready EN/ES), **no separate CRUD page for banks**; bank creation must be inline from the dropdown and is tenant-scoped.
 

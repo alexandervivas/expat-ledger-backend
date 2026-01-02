@@ -1,6 +1,6 @@
 # The Expat Ledger
 
-[![api-ci](https://github.com/alexandervivas/personal-banking-be-java/actions/workflows/ci.yml/badge.svg)](https://github.com/alexandervivas/personal-banking-be-java/actions/workflows/ci.yml)
+[![api-ci](https://github.com/alexandervivas/expat-ledger-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/alexandervivas/expat-ledger-backend/actions/workflows/ci.yml)
 
 Cross-border wealth management system for expatriates managing "dual financial lives" (USD, EUR, COP). **Scala 3**, **Cats Effect**, **Http4s**, **sbt**, **PostgreSQL**. 
 
@@ -215,7 +215,7 @@ We comply with CloudEvents 1.0 (binary content mode) when publishing to RabbitMQ
 - ce_time = RFC3339 timestamp (matches Avro field occurredAt)
 - ce_subject = domain identifier (tenantId for tenant events, userId for user events)
 - ce_datacontenttype = application/avro
-- ce_dataschema = urn:avro:schema:<full.avro.namespace.Name> (e.g., urn:avro:schema:com.eureckah.banking.events.v1.TenantCreated)
+- ce_dataschema = urn:avro:schema:<full.avro.namespace.Name> (e.g., urn:avro:schema:com.expatledger.events.v1.TenantCreated)
 
 Notes:
 

@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: Personal Banking API
+  title: Expat Ledger API
   version: 1.0.0
 paths:
   /v1/tenants:
@@ -402,6 +402,7 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         name:
           type: string
       required:
@@ -422,8 +423,10 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         tenantId:
           type: string
+          format: uuid
         type:
           type: string
       required:
@@ -435,6 +438,7 @@ components:
       properties:
         tenantId:
           type: string
+          format: uuid
         type:
           type: string
       required:
@@ -448,8 +452,10 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         tenantId:
           type: string
+          format: uuid
         name:
           type: string
       required:
@@ -461,6 +467,7 @@ components:
       properties:
         tenantId:
           type: string
+          format: uuid
         name:
           type: string
       required:
@@ -474,10 +481,13 @@ components:
       properties:
         id:
           type: string
+          format: uuid
         accountId:
           type: string
+          format: uuid
         bankId:
           type: string
+          format: uuid
         amount:
           type: number
           format: double
@@ -494,8 +504,10 @@ components:
       properties:
         accountId:
           type: string
+          format: uuid
         bankId:
           type: string
+          format: uuid
         amount:
           type: number
           format: double

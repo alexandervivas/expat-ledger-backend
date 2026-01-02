@@ -1,7 +1,7 @@
 {
   "type": "record",
   "name": "UserCreated",
-  "namespace": "com.eureckah.banking.events.v1",
+  "namespace": "com.expatledger.events.v1",
   "doc": "Event emitted when a user is created",
   "fields": [
     {"name": "eventId", "type": "string"},

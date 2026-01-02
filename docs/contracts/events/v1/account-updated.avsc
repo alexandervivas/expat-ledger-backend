@@ -1,13 +1,15 @@
 {
   "type": "record",
   "name": "AccountUpdated",
-  "namespace": "banking.events.v1",
+  "namespace": "com.expatledger.events.v1",
+  "doc": "Event emitted when an account is updated",
   "fields": [
-    { "name": "tenantId", "type": "string" },
-    { "name": "accountId", "type": "string" },
-    { "name": "name", "type": "string" },
-    { "name": "type", "type": "string" },
-    { "name": "currency", "type": "string" },
-    { "name": "updatedAt", "type": "string" }
+    {"name": "eventId", "type": "string"},
+    {"name": "occurredAt", "type": "string", "doc": "ISO-8601 instant"},
+    {"name": "tenantId", "type": "string"},
+    {"name": "accountId", "type": "string"},
+    {"name": "name", "type": "string"},
+    {"name": "type", "type": "string"},
+    {"name": "currency", "type": "string"}
   ]
 }
