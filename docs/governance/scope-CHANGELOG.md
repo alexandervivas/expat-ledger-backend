@@ -1,5 +1,48 @@
 # Scope CHANGELOG
 
+## 2026-01-02 — Build Tool Pivot: sbt adoption
+
+**Summary**
+
+- Replaced **Gradle** with **sbt** as the primary build tool for the Scala 3 project.
+- Aligned with Scala ecosystem standards and user preference.
+
+**Impacts**
+
+- **Build**: sbt (Scala Build Tool) used for compilation, testing, and formatting.
+- **Documentation**: README, AGENTS.md, and .junierules updated to reflect sbt usage.
+- **Backlog**: Tasks updated to reflect sbt setup.
+
+**Actions**
+
+- ADR-010 created: Use sbt as the Build Tool.
+- `README.md` and `docs/governance/AGENTS.md` updated.
+- `.junierules` updated to enforce sbt.
+- `docs/backlog/iteration-0.json` updated with sbt tasks.
+
+## 2026-01-02 — Scala-Native Pivot & Name Correction
+
+**Summary**
+
+- Corrected project name to **The Expat Ledger**.
+- Pivot to **Scala-native frameworks** (discarding Spring Boot) to avoid interoperability friction.
+- Adopted Typelevel/ZIO stacks for service implementation.
+
+**Impacts**
+
+- **Language**: Pure Scala 3 with functional effect systems (Cats Effect/ZIO).
+- **Architecture**: Distributed Modular Monolith using Scala-native libraries for Gateway and Discovery.
+- **Documentation**: Updated README, ADRs, and .junierules to reflect pure Scala stack.
+- **Tech Stack**: Scala 3, Cats Effect, Http4s, Doobie/Skunk, fs2-grpc.
+
+**Actions**
+
+- ADR-009 updated: Transition to Scala 3 and Native Frameworks.
+- `docs/architecture/scala-frameworks.md` updated with pure Scala recommendations.
+- `README.md` and `.junierules` updated (removed NomadLedger and Spring Boot).
+
+## 2026-01-02 — NomadLedger Pivot & Scala 3 Transition (Superseded)
+
 ## 2025-09-29 — Bank attribution + multi-currency balances
 
 **Summary**

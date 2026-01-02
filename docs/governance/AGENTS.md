@@ -1,8 +1,8 @@
 # AGENTS.md — Operating Manual for Development Agents
 
-This document defines how automated and AI agents (e.g., Codex, linters, bots) participate in the **Personal Banking API** development lifecycle. It sets roles, workflows, guardrails, and quality gates so every agent action moves the project in the intended direction.
+This document defines how automated and AI agents (e.g., Codex, linters, bots) participate in the **The Expat Ledger** development lifecycle. It sets roles, workflows, guardrails, and quality gates so every agent action moves the project in the intended direction.
 
-> **Scope:** API‑only repository (Java 21, Spring Boot, **Gradle**, PostgreSQL). Frontend is out of scope for current iterations.
+> **Scope:** API‑only repository (**Scala 3**, **Cats Effect**, **Http4s**, **sbt**, PostgreSQL). Frontend is out of scope for current iterations.
 
 ---
 
@@ -24,9 +24,9 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 
 ## 2) Repository Facts (for agents)
 
-- **Language/Build:** Java 21, Spring Boot, **Gradle**.
-- **CI:** GitHub Actions uses `gradle/actions/setup-gradle@v3` with a pinned version (no wrapper committed).
-- **Tooling:** `pre-commit`, commitlint (Node hook), Prettier (Node hook), Google Java Format (local JAR script `scripts/google-java-format.sh`).
+- **Language/Build:** Scala 3, Cats Effect, Http4s, **sbt**.
+- **CI:** GitHub Actions uses `sbt test`.
+- **Tooling:** `pre-commit`, commitlint (Node hook), Prettier (Node hook), Scalafmt.
 - **Docs:** MkDocs; `mkdocs.yml` uses Python constructor tags and is **excluded** from the YAML check.
 - **Contracts:** `docs/contracts/openapi/v1/openapi.yaml` (+ `CHANGELOG.md`).
 - **ADRs:** `docs/architecture/decisions/`
@@ -39,10 +39,10 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 
 ### 3.1 Code Generation Agent (Codex)
 
-- Implements small, well‑scoped changes in Java 21 with Spring Boot.
+- Implements small, well‑scoped changes in **Scala 3** using functional paradigms.
 - Writes/updates tests (unit/integration). Use **Testcontainers** for DB.
-- Ensures tenant scoping, idempotency, UTC time, bean validation, pagination defaults.
-- Runs locally before PR: `gradle test` → `pre-commit run --all-files`.
+- Ensures tenant scoping, idempotency, UTC time, data validation, pagination defaults.
+- Runs locally before PR: `sbt test` → `pre-commit run --all-files`.
 
 ### 3.2 Test Agent
 
@@ -67,8 +67,8 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 
 ### 3.5 CI Agent
 
-- Keeps `.github/workflows/ci.yml` aligned with `setup-gradle`.
-- Ensures CI runs: Java 21 setup → `gradle test` → `pre-commit run --all-files`.
+- Keeps `.github/workflows/ci.yml` aligned with sbt.
+- Ensures CI runs: **Scala 3** setup → `sbt test` → `pre-commit run --all-files`.
 - May add caching but **must not** weaken checks or skip tests.
 
 ### 3.6 Release/Deploy Agent (later)
@@ -82,12 +82,12 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 ## 4) Guardrails & Constraints
 
 - **Security:** OWASP ASVS L3 posture; no secrets in repo; env‑based configs only.
-- **IDs & Time:** UUID PKs; timestamps in **UTC** (`java.time`).
+- **IDs & Time:** UUID PKs; timestamps in **UTC** (e.g., via `java.time` or Scala-native libs).
 - **Tenant isolation:** every read/write must filter by `tenant_id`; cross‑tenant access returns 403/404 without data leak.
 - **Idempotency:** mutating endpoints require `Idempotency-Key`; persist `(route, key, response_hash)`; ingestion dedupe on `(tenant_id, source_id)`.
 - **Performance:** avoid N+1 queries; define critical indexes in ADR; respect pagination defaults.
 - **Logging:** structured JSON; include correlation/tenant IDs; no secrets/PII.
-- **Style:** formatting enforced by pre‑commit (Prettier + Google Java Format script).
+- **Style:** formatting enforced by pre‑commit (Prettier + Scalafmt).
 
 **Forbidden** (agents must never):
 
@@ -102,16 +102,16 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 ### 5.1 Feature or Bugfix
 
 1. Create a branch: `feat/<scope>-<short>` or `fix/<scope>-<short>`.
-2. Write tests → implement code → run `gradle test`.
+2. Write tests → implement code → run `sbt test`.
 3. Run `pre-commit run --all-files` and fix issues.
 4. Open PR with **Conventional Commit** title and the PR template checklist.
 
 ### 5.2 Contract change (OpenAPI)
 
-1. Update controller/DTOs and **synchronize** `docs/contracts/openapi/v1/openapi.yaml`.
+1. Update endpoint definition and **synchronize** `docs/contracts/openapi/v1/openapi.yaml`.
 2. Append a new entry to `docs/contracts/openapi/v1/CHANGELOG.md`.
 3. If change is breaking, create/extend an ADR and justify versioning (`/v2` when needed).
-4. PR must include examples and Problem Details per RFC7807.
+4. PR must include examples and Problem Details.
 
 ### 5.3 Database change
 
@@ -134,8 +134,8 @@ This document defines how automated and AI agents (e.g., Codex, linters, bots) p
 
 ## 6) PR Quality Gate (must pass)
 
-- ✅ **Build/tests:** `gradle test` green.
-- ✅ **pre-commit:** all hooks pass (YAML/MD, Prettier, Google Java Format, commitlint).
+- ✅ **Build/tests:** `sbt test` green.
+- ✅ **pre-commit:** all hooks pass (YAML/MD, Prettier, Scalafmt, commitlint).
 - ✅ **Docs/Contracts:** updated when API surface changed.
 - ✅ **Security:** tenant isolation, headers, idempotency validated.
 - ✅ **No secrets** in diffs; structured logs only.
@@ -161,9 +161,9 @@ What changed and why.
 
 ## 7) File & Directory Policy
 
-- **Allowed to edit:** `src/**`, `docs/**`, `.github/**`, `.pre-commit-config.yaml`, `.commitlintrc.cjs`, `scripts/**`, `build.gradle[.kts]`, `settings.gradle[.kts]`.
-- **Do not add:** Gradle wrapper to VCS (CI uses `setup-gradle`).
-- **.gitignore:** may include cache dirs (e.g., `.git-hooks-cache/`).
+- **Allowed to edit:** `src/**`, `docs/**`, `.github/**`, `.pre-commit-config.yaml`, `.commitlintrc.cjs`, `scripts/**`, `build.sbt`, `project/**`.
+- **Do not add:** credentials or secrets to VCS.
+- **.gitignore:** may include cache dirs (e.g., `.git-hooks-cache/`, `target/`, `.sbt/`).
 - **MkDocs:** do not remove Mermaid support; `mkdocs.yml` remains excluded from YAML hook.
 
 ---
@@ -180,16 +180,10 @@ What changed and why.
 
 ```bash
 # Build & test
-gradle -q test
+sbt test
 
 # Repo hygiene
 pre-commit run --all-files
-
-# Formatter cache/script
-chmod +x scripts/google-java-format.sh || true
-
-# MkDocs (local via Docker, optional in later iterations)
-docker compose up docs
 ```
 
 ---

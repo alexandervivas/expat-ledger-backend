@@ -14,7 +14,7 @@ We need a zero-cost public environment for demos. Render Free offers Web Service
 
 ## Decision
 
-- Deploy **API (Spring Boot)** as a Render **Web Service (Docker)**.
+- Deploy **API (Scala 3)** as a Render **Web Service (Docker)**.
 - Deploy **Frontend (Next.js)** as a Render **Web Service (Node SSR)**.
 - Use **Render Postgres (Free)** for demos only; add seeding & export scripts.
 - Track two latency views: steady-state P95 (SLO) and first-hit-after-idle P95 (informational).

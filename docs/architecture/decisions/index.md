@@ -11,3 +11,5 @@ This index lists all decisions. New ADRs append at the end. Superseded ADRs keep
 - ADR-006 — API Proxy and gRPC Module Communication (Accepted)
 - ADR-007 — Hosting on Render Free Tier (Accepted)
 - ADR-008 — CloudEvents adoption for domain events (Accepted)
+- ADR-009 — Transition to Scala 3 (Accepted)
+- ADR-010 — Use sbt as the Build Tool (Accepted)

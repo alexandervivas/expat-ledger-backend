@@ -1,0 +1,31 @@
+{
+  "iteration": 0,
+  "name": "Infrastructure & Foundation",
+  "status": "in-progress",
+  "tasks": [
+    {
+      "id": "T0.1",
+      "title": "Setup multi-module sbt project with Scala 3 support",
+      "status": "todo",
+      "owner": "Junie"
+    },
+    {
+      "id": "T0.2",
+      "title": "Setup basic Scala API Gateway (Http4s/Tapir)",
+      "status": "todo",
+      "owner": "Junie"
+    },
+    {
+      "id": "T0.3",
+      "title": "Configure Docker Compose with the 'Expat Stack' (Postgres, RabbitMQ)",
+      "status": "todo",
+      "owner": "Junie"
+    },
+    {
+      "id": "T0.4",
+      "title": "Gateway calls a 'Ping' gRPC service (fs2-grpc)",
+      "status": "todo",
+      "owner": "Junie"
+    }
+  ]
+}

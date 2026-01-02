@@ -10,46 +10,46 @@ flowchart TB
     Partners[Partner Integrations]
   end
 
-  subgraph API[API Module]
-    REST[REST Controllers / Security Proxy]
+  subgraph API[API Entry Point]
+    Gateway[Scala API Gateway]
   end
 
   subgraph Modules[Business Modules]
-    Tenants[Tenants Module]
+    Tenants[Tenants Service]
+    Account[Account Service]
+    Transaction[Transaction Service]
+    FX[FX Service]
   end
 
   subgraph Infra[Infrastructure]
-    H2[H2 in-memory]
-    PG[PostgreSQL]
+    PG[(PostgreSQL)]
     RMQ[RabbitMQ]
-    Eureka[Eureka Server]
-    FX[FX Provider SPI]
-    OTel[OTel Collector]
-    Prom[Prometheus]
-    Graf[Grafana]
+    Gateway[Scala API Gateway]
   end
 
   %% External to API
-  FE -->|HTTPS| REST
-  Partners -->|AMQP| RMQ
+  FE -->|HTTPS| Gateway
+  Gateway -->|gRPC| Tenants
+  Gateway -->|gRPC| Account
+  Gateway -->|gRPC| Transaction
+  Gateway -->|gRPC| FX
 
-  %% API to Modules
-  REST -->|gRPC| Tenants
-
-  %% Messaging
-  Tenants -->|AMQP events| RMQ
-  RMQ -->|AMQP events| Tenants
+  %% Messaging (CloudEvents)
+  Transaction -->|AMQP CloudEvents| RMQ
+  RMQ -->|AMQP CloudEvents| Account
+  Account -->|AMQP CloudEvents| RMQ
 
   %% Persistence
-  Tenants -->|JDBC| H2
-  Tenants -. JDBC .-> PG
+  Tenants -->|JDBC| PG
+  Account -->|JDBC| PG
+  Transaction -->|JDBC| PG
+  FX -->|JDBC| PG
 
   %% Service Discovery
-  REST -. register/fetch .-> Eureka
-  Tenants -. register/fetch .-> Eureka
+  Gateway -. static/env config .-> Gateway
 
   %% Observability (roadmap)
-  REST -. OTel SDK .-> OTel
+  Gateway -. OTel SDK .-> OTel
   OTel --> Prom
   Prom --> Graf
 
