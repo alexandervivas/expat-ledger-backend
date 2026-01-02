@@ -2,7 +2,7 @@
 
 [![api-ci](https://github.com/alexandervivas/expat-ledger-backend/actions/workflows/ci.yml/badge.svg)](https://github.com/alexandervivas/expat-ledger-backend/actions/workflows/ci.yml)
 
-Cross-border wealth management system for expatriates managing "dual financial lives" (USD, EUR, COP). **Scala 3**, **Cats Effect**, **Http4s**, **sbt**, **PostgreSQL**. 
+Cross-border wealth management system for expatriates managing "dual financial lives" (USD, EUR, COP). **Scala 3**, **Cats Effect**, **Http4s**, **sbt**, **PostgreSQL**.
 
 ## Context & Scope (Cross-Border Focus)
 
@@ -111,7 +111,7 @@ git commit --amend
 
 Every PR should include a short summary and tick the relevant checklist items:
 
-- Scope/ADRs updated when applicable
+- Scope/ADRs updated when applicable (see `.junie/guidelines.md` for rules)
 - **OpenAPI** + contract **CHANGELOG** updated if the API surface changed
 - Tests updated (unit / integration / CDC)
 - Security considerations reviewed (headers, authz, tenant scoping)

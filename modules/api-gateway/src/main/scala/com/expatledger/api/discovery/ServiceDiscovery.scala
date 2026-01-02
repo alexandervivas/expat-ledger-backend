@@ -1,6 +1,6 @@
-package com.expatledger.apigateway.discovery
+package com.expatledger.api.discovery
 
-import com.expatledger.apigateway.config.GrpcServiceConfig
+import com.expatledger.api.config.GrpcServiceConfig
 import cats.effect.IO
 import com.comcast.ip4s.{Host, Port}
 

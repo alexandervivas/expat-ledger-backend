@@ -1,5 +1,23 @@
 # Scope CHANGELOG
 
+## 2026-01-02 — Guidelines Consolidation
+
+**Summary**
+
+- Consolidated `.junierules` and `docs/governance/AGENTS.md` into `.junie/guidelines.md`.
+- Established a single source of truth for Junie's operational rules and agent guidelines.
+
+**Impacts**
+
+- **Documentation**: `.junie/guidelines.md` is now the primary reference for agents.
+- **Repository Hygiene**: Removed redundant `.junierules` and `AGENTS.md`.
+
+**Actions**
+
+- Removed `.junierules`.
+- Removed `docs/governance/AGENTS.md`.
+- Updated `mkdocs.yml` and `README.md` to point to `.junie/guidelines.md`.
+
 ## 2026-01-02 — Build Tool Pivot: sbt adoption
 
 **Summary**

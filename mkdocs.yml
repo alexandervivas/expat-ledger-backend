@@ -17,7 +17,7 @@ nav:
       - Product CHANGELOG: governance/product-CHANGELOG.md
       - Security: governance/SECURITY.md
       - SLOs & SLIs: governance/SLOs-SLIs.md
-      - Agents Operating Manual: governance/AGENTS.md
+      - Agents Operating Manual: .junie/guidelines.md
   - UX:
       - Stitch Prompt: ux/stitch-prompt.md
   - Operations:
