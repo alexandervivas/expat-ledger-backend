@@ -20,7 +20,7 @@
     {
       "id": "T0.3",
       "title": "Scaffold API Gateway with Tapir, Http4s & Cats Effect",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Create a base routing structure using Http4s and Tapir (IO-based). Implement environment-based discovery to resolve gRPC service addresses via static configuration."
     },
