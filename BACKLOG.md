@@ -22,4 +22,6 @@
 | T1.6 | Persistence Integration Test (Testcontainers) | ⏳ Todo | Junie |
 | T1.7 | Consolidate Guidelines | ✅ Done | Junie |
 | T1.8 | Rich Event Model Refactoring | ✅ Done | Junie |
+| T1.9 | Optimize Outbox Batch Inserts | ✅ Done | Junie |
+| T1.10 | Fix brittle eventType derivation | ✅ Done | Junie |
 

@@ -8,7 +8,8 @@ trait Event:
   def aggregateId: UUID
   def occurredAt: OffsetDateTime
 
-trait DomainEvent extends Event
+trait DomainEvent extends Event:
+  def eventType: String
 
 case class OutboxEvent(
     id: UUID,

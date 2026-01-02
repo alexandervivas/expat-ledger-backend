@@ -15,7 +15,7 @@ trait Repository[F[_]]:
       id = event.id,
       aggregateType = aggType,
       aggregateId = event.aggregateId,
-      eventType = event.getClass.getSimpleName.replace("$", ""),
+      eventType = event.eventType,
       payload = eventPayload,
       occurredAt = event.occurredAt
     )

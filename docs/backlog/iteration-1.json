@@ -66,6 +66,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Use Skunk's insertMany to optimize batch inserts in OutboxRepository, reducing round-trips to the database."
+    },
+    {
+      "id": "T1.10",
+      "title": "Fix brittle eventType derivation",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Refactor Repository to use DomainEvent.eventType instead of getClass.getSimpleName to avoid coupling with code structure."
     }
   ]
 }
