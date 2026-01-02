@@ -1,4 +1,4 @@
-package com.expatledger.sharedkernel.domain
+package com.expatledger.kernel.domain
 
 import scala.annotation.targetName
 

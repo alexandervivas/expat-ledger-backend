@@ -14,7 +14,7 @@
     {
       "id": "T1.2",
       "title": "Implement Outbox Pattern Infrastructure",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Create an 'outbox' table. Implement a base repository trait to save domain events atomically with domain entities using Skunk transactions."
     },
