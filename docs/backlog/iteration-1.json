@@ -59,6 +59,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Refactor events to use a base 'Event' trait and concrete case classes for 'DomainEvent' and 'OutboxEvent' to improve type safety and ergonomics."
+    },
+    {
+      "id": "T1.9",
+      "title": "Optimize Outbox Batch Inserts",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Use Skunk's insertMany to optimize batch inserts in OutboxRepository, reducing round-trips to the database."
     }
   ]
 }
