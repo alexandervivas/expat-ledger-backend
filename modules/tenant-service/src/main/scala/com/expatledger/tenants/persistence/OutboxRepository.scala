@@ -29,4 +29,4 @@ class SkunkOutboxRepository[F[_]: MonadCancelThrow](session: Session[F]) extends
   override def save(event: OutboxEvent): Command[OutboxEvent] = insert
 
   override def saveAll(events: List[OutboxEvent]): F[Unit] =
-    events.traverse_(e => session.prepare(insert).flatMap(_.execute(e)))
+    session.prepare(insert).flatMap(pc => events.traverse_(pc.execute))
