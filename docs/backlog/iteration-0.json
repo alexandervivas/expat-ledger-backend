@@ -5,27 +5,31 @@
   "tasks": [
     {
       "id": "T0.1",
-      "title": "Setup multi-module sbt project with Scala 3 support",
+      "title": "Setup multi-module sbt project structure",
       "status": "todo",
-      "owner": "Junie"
+      "owner": "Junie",
+      "description": "Configure build.sbt with modules: shared-kernel, api-gateway, tenant-service. Integrate sbt-protoc for fs2-grpc and align with Cats Effect 3 ecosystem."
     },
     {
       "id": "T0.2",
-      "title": "Setup basic Scala API Gateway (Http4s/Tapir)",
+      "title": "Define 'Money' Opaque Types in Shared Kernel",
       "status": "todo",
-      "owner": "Junie"
+      "owner": "Junie",
+      "description": "Implement type-safe currency and amount handling using Scala 3 Opaque Types or Iron. Ensure pure functional logic compatible with Cats Effect."
     },
     {
       "id": "T0.3",
-      "title": "Configure Docker Compose with the 'Expat Stack' (Postgres, RabbitMQ)",
+      "title": "Scaffold API Gateway with Tapir, Http4s & Cats Effect",
       "status": "todo",
-      "owner": "Junie"
+      "owner": "Junie",
+      "description": "Create a base routing structure using Http4s and Tapir (IO-based). Implement environment-based discovery to resolve gRPC service addresses via static configuration."
     },
     {
       "id": "T0.4",
-      "title": "Gateway calls a 'Ping' gRPC service (fs2-grpc)",
+      "title": "Docker Compose 'Expat Stack' v1",
       "status": "todo",
-      "owner": "Junie"
+      "owner": "Junie",
+      "description": "Containerize Gateway and Tenant shell using sbt-native-packager. Configure networking and environment variables for service location (Env-based discovery)."
     }
   ]
 }
