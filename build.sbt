@@ -4,6 +4,8 @@ ThisBuild / organizationName := "The Expat Ledger"
 
 import Dependencies.*
 
+lazy val dockerImage = "eclipse-temurin:21-jre"
+
 lazy val root = (project in file("."))
   .aggregate(sharedKernel, apiGateway, tenantService)
   .settings(
@@ -20,16 +22,20 @@ lazy val sharedKernel = (project in file("modules/shared-kernel"))
 
 lazy val apiGateway = (project in file("modules/api-gateway"))
   .dependsOn(sharedKernel)
-  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(
     name := "api-gateway",
-    libraryDependencies ++= apiGatewayDependencies
+    libraryDependencies ++= apiGatewayDependencies,
+    dockerBaseImage := dockerImage,
+    dockerExposedPorts := Seq(8080)
   )
 
 lazy val tenantService = (project in file("modules/tenant-service"))
   .dependsOn(sharedKernel)
-  .enablePlugins(JavaAppPackaging)
+  .enablePlugins(JavaAppPackaging, DockerPlugin)
   .settings(
     name := "tenant-service",
-    libraryDependencies ++= tenantServiceDependencies
+    libraryDependencies ++= tenantServiceDependencies,
+    dockerBaseImage := dockerImage,
+    dockerExposedPorts := Seq(9000)
   )

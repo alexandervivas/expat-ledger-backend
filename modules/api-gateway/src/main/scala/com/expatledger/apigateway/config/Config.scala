@@ -13,6 +13,6 @@ case class ServiceConfig(
 )
 
 case class GrpcServiceConfig(
-    host: String,
-    port: Int
+    host: Host,
+    port: Port
 )
