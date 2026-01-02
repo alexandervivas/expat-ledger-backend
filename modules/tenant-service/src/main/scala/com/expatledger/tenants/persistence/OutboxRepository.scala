@@ -40,5 +40,6 @@ class SkunkOutboxRepository[F[_] : MonadCancelThrow](session: Session[F]) extend
     session.execute(insert)(event).void
 
   override def saveAll(events: List[OutboxEvent]): F[Unit] =
-    if events.isEmpty then ().pure[F]
-    else session.execute(insertMany(events.length))(events).void
+    events.grouped(1000).toList.traverse_ { chunk =>
+      session.execute(insertMany(chunk.length))(chunk)
+    }.void
