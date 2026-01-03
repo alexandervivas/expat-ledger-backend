@@ -129,6 +129,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Replaced Scala 3 contextual DI with Google Guice 7.0. Created TenantModule and updated service wiring to use @Inject and constructor injection."
+    },
+    {
+      "id": "T1.21",
+      "title": "Batch Insert Tenant Tax Residencies",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Optimized SkunkTenantRepository to save all tax residencies in a single database round-trip using batch inserts."
     }
   ]
 }

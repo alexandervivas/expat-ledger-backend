@@ -6,9 +6,7 @@ import io.grpc.{Metadata, ServerServiceDefinition}
 
 import java.net.InetSocketAddress
 import com.expatledger.tenant.v1.tenant.*
-import com.expatledger.tenants.config.*
-import com.expatledger.tenants.application.TenantService
-import com.expatledger.tenants.infrastructure.di.TenantModule
+import com.expatledger.tenants.config.TenantServiceConfig
 import com.expatledger.tenants.infrastructure.persistence.DbMigrator
 import skunk.Session
 import natchez.Trace.Implicits.noop
@@ -36,11 +34,8 @@ object Main extends IOApp {
 
       _ <- sessionPool.use { pool =>
         pool.use { session =>
-          val injector = com.google.inject.Guice.createInjector(new TenantModule(session))
-          val tenantService = injector.getInstance(classOf[TenantService[IO]])
 
           val grpcService: TenantServiceFs2Grpc[IO, Metadata] = (request: GetTenantRequest, ctx: Metadata) =>
-            val _ = tenantService
             IO.pure(GetTenantResponse(id = request.id, name = "Mock Tenant"))
 
           val serviceDefinition: Resource[IO, ServerServiceDefinition] =

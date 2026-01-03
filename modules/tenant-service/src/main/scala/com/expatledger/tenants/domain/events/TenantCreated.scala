@@ -32,12 +32,12 @@ case class TenantCreated(
 object TenantCreated:
   given CirceCodec[TenantCreated] = deriveCodec
   
-  def apply(tenant: Tenant, taxResidencies: List[String], occurredAt: OffsetDateTime): TenantCreated =
+  def apply(tenant: Tenant, occurredAt: OffsetDateTime): TenantCreated =
     TenantCreated(
       id = UUID.randomUUID(),
       aggregateId = tenant.id,
       name = tenant.name,
       reportingCurrency = tenant.reportingCurrency,
-      taxResidencies = taxResidencies,
+      taxResidencies = tenant.taxResidencies.toList.map(_.countryCode),
       occurredAt = occurredAt
     )

@@ -32,4 +32,5 @@
 | T1.18 | Separate Service Contract from Implementation | ✅ Done | Junie |
 | T1.19 | Implement Dependency Injection with Scala 3 Contextual Abstractions | ✅ Done | Junie |
 | T1.20 | Standardize Dependency Injection with Google Guice | ✅ Done | Junie |
+| T1.21 | Batch Insert Tenant Tax Residencies | ✅ Done | Junie |
 

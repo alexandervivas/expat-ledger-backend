@@ -29,6 +29,10 @@ private object SkunkTenantRepository:
   val insertTaxResidency: Command[TenantId *: String *: EmptyTuple] =
     sql"INSERT INTO tenant_tax_residency (tenant_id, country_code) VALUES ($tenantId, ${varchar(2)})".command
 
+  def insertTaxResidencies(n: Int): Command[List[TenantId *: String *: EmptyTuple]] =
+    val encoder = (tenantId *: varchar(2)).values.list(n)
+    sql"INSERT INTO tenant_tax_residency (tenant_id, country_code) VALUES $encoder".command
+
   val selectTenant: Query[TenantId, TenantId *: String *: Currency *: OffsetDateTime *: OffsetDateTime *: EmptyTuple] =
     sql"SELECT id, name, reporting_currency, created_at, updated_at FROM tenant WHERE id = $tenantId".query(tenantDecoder)
 
@@ -39,11 +43,13 @@ class SkunkTenantRepository[F[_]: Sync](session: Session[F]) extends TenantRepos
   import SkunkTenantRepository.*
 
   override def save(tenant: Tenant): F[Unit] =
+    val taxResidencies = tenant.taxResidencies.toList.map(tr => tenant.id *: tr.countryCode *: EmptyTuple)
     for
       _ <- session.execute(insertTenant)(tenant)
-      _ <- tenant.taxResidencies.toList.traverse { tr =>
-        session.execute(insertTaxResidency)(tenant.id *: tr.countryCode *: EmptyTuple)
-      }
+      _ <- if taxResidencies.nonEmpty then
+        session.execute(insertTaxResidencies(taxResidencies.length))(taxResidencies).void
+      else
+        Sync[F].unit
     yield ()
 
   override def findById(id: TenantId): F[Option[Tenant]] =

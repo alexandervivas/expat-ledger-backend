@@ -30,7 +30,7 @@ class TenantServiceLive[F[_] : MonadCancelThrow : Sync] @Inject()(
       updatedAt = now
     )
 
-    val outboxEvent = TenantCreated(tenant, List(request.initialTaxResidency), now).toOutboxEvent
+    val outboxEvent = TenantCreated(tenant, now).toOutboxEvent
 
     uow.atomic {
       for
