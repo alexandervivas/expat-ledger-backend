@@ -1,7 +1,7 @@
 package com.expatledger.tenants.infrastructure.di
 
 import com.expatledger.kernel.domain.OutboxRepository
-import com.expatledger.tenant.v1.tenant.TenantServiceFs2Grpc
+import _root_.com.expatledger.tenant.v1.tenant.TenantServiceFs2Grpc
 import com.expatledger.tenants.application.{TenantService, TenantServiceLive, UnitOfWork}
 import skunk.Session
 import cats.effect.IO

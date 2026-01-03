@@ -28,9 +28,9 @@
     {
       "id": "T1.4",
       "title": "Outbox Poller & CloudEvent Publisher",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
-      "description": "Implement an fs2-based background stream in tenant-service to poll the outbox and publish Avro-encoded CloudEvents to RabbitMQ."
+      "description": "Implemented an fs2-based background stream in tenant-service to poll the outbox and publish Avro-encoded CloudEvents to RabbitMQ."
     },
     {
       "id": "T1.5",
@@ -136,6 +136,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Optimized SkunkTenantRepository to save all tax residencies in a single database round-trip using batch inserts."
+    },
+    {
+      "id": "T1.22",
+      "title": "Enhance Outbox Poller Error Handling & Logging",
+      "status": "todo",
+      "owner": "Junie",
+      "description": "Implement robust error handling for failed event publishing, including retries with exponential backoff and structured logging using log4cats."
     }
   ]
 }

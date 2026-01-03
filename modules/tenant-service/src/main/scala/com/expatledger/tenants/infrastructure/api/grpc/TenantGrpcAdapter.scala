@@ -3,7 +3,7 @@ package com.expatledger.tenants.infrastructure.api.grpc
 import cats.effect.*
 import cats.syntax.all.*
 import io.grpc.Metadata
-import com.expatledger.tenant.v1.tenant.*
+import _root_.com.expatledger.tenant.v1.tenant.*
 import com.expatledger.tenants.application.TenantService
 import com.expatledger.tenants.domain.model.TenantId
 import jakarta.inject.Inject

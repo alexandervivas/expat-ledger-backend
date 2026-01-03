@@ -15,6 +15,9 @@ object Dependencies {
     val PureConfig  = "0.17.9"
     val Circe       = "0.14.15"
     val Guice       = "7.0.0"
+    val Fs2Rabbit   = "5.5.0"
+    val Avro        = "1.12.1"
+    val CloudEvents = "4.0.1"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -44,12 +47,19 @@ object Dependencies {
   val circeParser  = "io.circe" %% "circe-parser"  % Versions.Circe
   val guice        = "com.google.inject" % "guice" % Versions.Guice
 
+  val fs2Rabbit = "dev.profunktor" %% "fs2-rabbit" % Versions.Fs2Rabbit
+  val avro      = "org.apache.avro" % "avro"       % Versions.Avro
+  val cloudEventsCore = "io.cloudevents" % "cloudevents-core" % Versions.CloudEvents
+  val cloudEventsJson = "io.cloudevents" % "cloudevents-json-jackson" % Versions.CloudEvents
+
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
     circeCore,
     circeGeneric,
     circeParser,
+    cloudEventsCore,
+    cloudEventsJson,
     munit,
     munitCatsEffect
   )
@@ -78,6 +88,10 @@ object Dependencies {
     circeGeneric,
     circeParser,
     guice,
+    fs2Rabbit,
+    avro,
+    cloudEventsCore,
+    cloudEventsJson,
     munit,
     munitCatsEffect
   )

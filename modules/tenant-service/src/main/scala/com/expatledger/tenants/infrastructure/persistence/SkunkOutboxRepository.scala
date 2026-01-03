@@ -10,6 +10,12 @@ import fs2.Stream
 
 
 private object SkunkOutboxRepository:
+  private val decoder: Decoder[OutboxEvent] =
+    (uuid *: text *: uuid *: text *: text *: timestamptz).map {
+      case id *: aggregateType *: aggregateId *: eventType *: payload *: occurredAt *: EmptyTuple =>
+        OutboxEvent(id, aggregateType, aggregateId, eventType, payload, occurredAt)
+    }
+
   private val encoder: Encoder[OutboxEvent] =
     (uuid *: text *: uuid *: text *: text *: timestamptz).values.contramap { e =>
       e.id *: e.aggregateType *: e.aggregateId *: e.eventType *: e.payload *: e.occurredAt *: EmptyTuple
@@ -29,6 +35,22 @@ private object SkunkOutboxRepository:
     """.command
   }
 
+  private val selectUnprocessed: Query[Int, OutboxEvent] =
+    sql"""
+      SELECT id, aggregate_type, aggregate_id, event_type, payload, occurred_at
+      FROM outbox
+      WHERE processed_at IS NULL
+      ORDER BY occurred_at ASC
+      LIMIT $int4
+    """.query(decoder)
+
+  private def updateProcessed(n: Int): Command[List[java.util.UUID]] =
+    sql"""
+      UPDATE outbox
+      SET processed_at = NOW()
+      WHERE id IN (${uuid.list(n)})
+    """.command
+
 class SkunkOutboxRepository[F[_] : Sync](session: Session[F]) extends OutboxRepository[F]:
 
   import SkunkOutboxRepository.*
@@ -43,3 +65,10 @@ class SkunkOutboxRepository[F[_] : Sync](session: Session[F]) extends OutboxRepo
       }
       .compile
       .drain
+
+  override def fetchUnprocessed(limit: Int): F[List[OutboxEvent]] =
+    session.prepare(selectUnprocessed).flatMap(_.stream(limit, 1024).compile.toList)
+
+  override def markProcessed(ids: List[java.util.UUID]): F[Unit] =
+    if ids.isEmpty then Sync[F].unit
+    else session.prepare(updateProcessed(ids.length)).flatMap(_.execute(ids)).void

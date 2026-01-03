@@ -19,6 +19,8 @@ class TenantServiceTest extends CatsEffectSuite:
     var savedEvent: Option[OutboxEvent] = None
     override def save(event: OutboxEvent): IO[Unit] = IO { savedEvent = Some(event) }
     override def saveAll(events: List[OutboxEvent]): IO[Unit] = IO.unit
+    override def fetchUnprocessed(limit: Int): IO[List[OutboxEvent]] = IO.pure(Nil)
+    override def markProcessed(ids: List[java.util.UUID]): IO[Unit] = IO.unit
 
   class MockUnitOfWork extends UnitOfWork[IO]:
     override def atomic[A](action: IO[A])(using F: MonadCancelThrow[IO]): IO[A] =
