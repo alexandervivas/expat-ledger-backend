@@ -18,7 +18,7 @@ While ADR-013 introduced Scala 3 Contextual Abstractions for Dependency Injectio
 
 ## Consequences
 
--   **Standardization**: Provides a familiar DI pattern for most JVM developers.
--   **Explicit Wiring**: Dependencies are explicitly declared in modules, making the wiring logic easier to trace than implicit contextual abstractions.
--   **Library Dependency**: Introduces `guice` and `jakarta.inject-api` as project dependencies.
--   **Runtime vs Compile-time**: Guice performs wiring at runtime (during injector creation), whereas Scala 3 contextual abstractions are checked at compile-time. We accept this trade-off for the benefit of standardization and reduced complexity in service entry points.
+- **Standardization**: Provides a familiar DI pattern for most JVM developers.
+- **Explicit Wiring**: Dependencies are explicitly declared in modules, making the wiring logic easier to trace than implicit contextual abstractions.
+- **Library Dependency**: Introduces `guice` and `jakarta.inject-api` as project dependencies.
+- **Runtime vs Compile-time**: Guice performs wiring at runtime (during injector creation), whereas Scala 3 contextual abstractions are checked at compile-time. We accept this trade-off for the benefit of standardization and reduced complexity in service entry points.

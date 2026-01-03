@@ -39,8 +39,8 @@ This repository contains the **API** only. Tooling and docs below reflect that.
 
 - **Scala 3.x**
 - **sbt** (Scala Build Tool)
-- **Python ≥ 3.12** (for `pre-commit`, MkDocs, and backlog scripts)
-- **pipx** (recommended for installing `pre-commit` and `mkdocs`)
+- **Python ≥ 3.12** (for `pre-commit`, MkDocs, and backlog scripts). Using `asdf` is recommended.
+- **pip** (to install `pre-commit` and `mkdocs` via `python -m pip`)
 - **Node.js ≥ 18** (for local Conventional Commits validation via `commitlint`)
 - (Optional) **Docker** for local infra (used in later iterations)
 
@@ -60,17 +60,14 @@ This repository contains the **API** only. Tooling and docs below reflect that.
 Install the git hooks (runs once per machine):
 
 ```bash
-# Install pre-commit (recommended via pipx)
-pipx install pre-commit  # or: pip install --user pre-commit
-
-# Ensure formatter script is executable (one time)
-chmod +x scripts/*.sh || true
+# Install pre-commit
+python -m pip install pre-commit
 
 # Install local git hooks (pre-commit + commit-msg)
 make pre-commit-install
 ```
 
-> If you change hook definitions, re-run: `pre-commit clean && pre-commit install`.
+> If you change hook definitions, re-run: `python -m pre_commit clean && python -m pre_commit install`.
 
 ---
 
@@ -127,7 +124,7 @@ Minimal GitHub Actions workflow (`.github/workflows/ci.yml`) runs on push/PR:
 
 - Java 21 setup
 - `sbt test`
-- `pre-commit run --all-files`
+- `python -m pre_commit run --all-files`
 
 Keep builds green; fix style/format issues locally with `make format`.
 

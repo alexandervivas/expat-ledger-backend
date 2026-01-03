@@ -27,7 +27,7 @@ class RabbitMQPublisher[F[_]: Sync](
     routingKey: RoutingKey
 )(using channel: AMQPChannel) extends EventPublisher[F]:
 
-  implicit val byteArrayEncoder: MessageEncoder[F, Array[Byte]] = 
+  implicit val byteArrayEncoder: MessageEncoder[F, Array[Byte]] =
     Kleisli(payload => Sync[F].pure(AmqpMessage(payload, AmqpProperties.empty)))
 
   private val avroSchemaJson = """

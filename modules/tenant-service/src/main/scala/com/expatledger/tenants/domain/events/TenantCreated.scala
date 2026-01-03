@@ -31,7 +31,7 @@ case class TenantCreated(
 
 object TenantCreated:
   given CirceCodec[TenantCreated] = deriveCodec
-  
+
   def apply(tenant: Tenant, occurredAt: OffsetDateTime): TenantCreated =
     TenantCreated(
       id = UUID.randomUUID(),

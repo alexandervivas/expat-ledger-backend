@@ -34,4 +34,5 @@
 | T1.20 | Standardize Dependency Injection with Google Guice | ✅ Done | Junie |
 | T1.21 | Batch Insert Tenant Tax Residencies | ✅ Done | Junie |
 | T1.22 | Enhance Outbox Poller Error Handling & Logging | ⏳ Todo | Junie |
+| T1.23 | Fix and Standardize Pre-commit Hook Setup | ✅ Done | Junie |
 

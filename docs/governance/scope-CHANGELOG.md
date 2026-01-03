@@ -1,5 +1,25 @@
 # Scope CHANGELOG
 
+## 2026-01-03 — Pre-commit Hook Standardized
+
+**Summary**
+
+- Standardized pre-commit hook execution to use `python -m pre_commit` to support `asdf` environments.
+- Removed obsolete `google-java-format` hook (project is Scala-only).
+- Updated `README.md` and `Makefile` to reflect standardized setup.
+
+**Impacts**
+
+- **Developer Experience**: Improved first-time environment setup reliability.
+- **Repository Hygiene**: Removed unused formatting scripts and configurations.
+
+**Actions**
+
+- Updated `.pre-commit-config.yaml` (removed `google-java-format`).
+- Updated `Makefile` (standardized `lint` and `format` targets).
+- Updated `README.md` (updated prerequisites and setup instructions).
+- Updated `docs/backlog/iteration-1.json` with task T1.23.
+
 ## 2026-01-02 — Guidelines Consolidation
 
 **Summary**

@@ -14,9 +14,9 @@ class TenantGrpcAdapter[F[_]: Async] @Inject()(tenantService: TenantService[F]) 
   override def getTenant(request: GetTenantRequest, ctx: Metadata): F[GetTenantResponse] = {
     val tenantId = TenantId(UUID.fromString(request.id))
     tenantService.getTenant(tenantId).flatMap {
-      case Some(tenant) => 
+      case Some(tenant) =>
         Async[F].pure(GetTenantResponse(id = tenant.id.toString, name = tenant.name))
-      case None => 
+      case None =>
         Async[F].raiseError(new io.grpc.StatusRuntimeException(io.grpc.Status.NOT_FOUND.withDescription(s"Tenant with id ${request.id} not found")))
     }
   }
