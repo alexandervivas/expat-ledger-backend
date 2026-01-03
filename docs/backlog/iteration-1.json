@@ -89,11 +89,11 @@
       "description": "Group chunks by size in saveAll to minimize prepare calls."
     },
     {
-      "id": "T1.14",
-      "title": "Fix non-atomic transaction in Repository",
+      "id": "T1.15",
+      "title": "Fix Skunk transactional compilation error",
       "status": "done",
       "owner": "Junie",
-      "description": "Corrected the 'atomic' method in Repository.scala to pass the transactional session to the action instead of the non-transactional one."
+      "description": "Fixed compilation error in Repository.scala caused by using non-existent session.transactional method."
     }
   ]
 }
