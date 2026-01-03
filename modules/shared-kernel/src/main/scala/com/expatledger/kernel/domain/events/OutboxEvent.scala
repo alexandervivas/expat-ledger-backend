@@ -1,7 +1,7 @@
-package com.expatledger.kernel.domain
+package com.expatledger.kernel.domain.events
 
-import java.util.UUID
 import java.time.OffsetDateTime
+import java.util.UUID
 
 case class OutboxEvent(
     override val id: UUID,
@@ -9,5 +9,6 @@ case class OutboxEvent(
     override val aggregateId: UUID,
     eventType: String,
     payload: String, // Serialized JSON
+    schemaUrn: String,
     override val occurredAt: OffsetDateTime
 ) extends Event

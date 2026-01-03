@@ -1,6 +1,6 @@
 package com.expatledger.tenants.domain.model
 
-import com.expatledger.kernel.domain.Currency
+import com.expatledger.kernel.domain.model.Currency
 import io.circe.Codec as CirceCodec
 import io.circe.generic.semiauto.*
 
@@ -15,5 +15,5 @@ case class Tenant(
     updatedAt: OffsetDateTime
 )
 object Tenant:
-  import com.expatledger.kernel.domain.Currency.given
+  import Currency.given
   given CirceCodec[Tenant] = deriveCodec

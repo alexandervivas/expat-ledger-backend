@@ -32,7 +32,7 @@ lazy val apiGateway = (project in file("modules/api-gateway"))
 
 lazy val tenantService = (project in file("modules/tenant-service"))
   .dependsOn(sharedKernel)
-  .enablePlugins(JavaAppPackaging, DockerPlugin)
+  .enablePlugins(JavaAppPackaging, DockerPlugin, Fs2Grpc)
   .settings(
     name := "tenant-service",
     libraryDependencies ++= tenantServiceDependencies,

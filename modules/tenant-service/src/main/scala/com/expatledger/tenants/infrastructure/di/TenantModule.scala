@@ -1,22 +1,22 @@
 package com.expatledger.tenants.infrastructure.di
 
-import com.expatledger.kernel.domain.OutboxRepository
 import _root_.com.expatledger.tenant.v1.tenant.TenantServiceFs2Grpc
+import cats.effect.*
+import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.application.{TenantService, TenantServiceLive, UnitOfWork}
-import skunk.Session
-import cats.effect.IO
+import skunk.*
 import io.grpc.Metadata
 import com.expatledger.tenants.domain.repositories.TenantRepository
 import com.expatledger.tenants.infrastructure.api.grpc.TenantGrpcAdapter
-import com.expatledger.tenants.infrastructure.persistence.{SkunkOutboxRepository, SkunkTenantRepository, SkunkUnitOfWork}
+import com.expatledger.tenants.infrastructure.persistence.{OutboxRepositoryLive, SkunkUnitOfWork, TenantRepositoryLive}
 import com.google.inject.{AbstractModule, TypeLiteral}
 
-class TenantModule(session: Session[IO]) extends AbstractModule {
+class TenantModule[F[_] : Sync](pool: Resource[F, Session[F]]) extends AbstractModule {
   override def configure(): Unit = {
-    bind(new TypeLiteral[TenantRepository[IO]] {}).toInstance(new SkunkTenantRepository[IO](session))
-    bind(new TypeLiteral[OutboxRepository[IO]] {}).toInstance(new SkunkOutboxRepository[IO](session))
-    bind(new TypeLiteral[UnitOfWork[IO]] {}).toInstance(new SkunkUnitOfWork[IO](session))
-    val _ = bind(new TypeLiteral[TenantService[IO]] {}).to(new TypeLiteral[TenantServiceLive[IO]] {})
-    val _ = bind(new TypeLiteral[TenantServiceFs2Grpc[IO, Metadata]] {}).to(new TypeLiteral[TenantGrpcAdapter[IO]] {})
+    bind(new TypeLiteral[TenantRepository[F]] {}).toInstance(new TenantRepositoryLive[F](pool))
+    bind(new TypeLiteral[OutboxRepository[F]] {}).toInstance(new OutboxRepositoryLive[F](pool))
+    bind(new TypeLiteral[UnitOfWork[F]] {}).toInstance(new SkunkUnitOfWork[F](pool))
+    val _ = bind(new TypeLiteral[TenantService[F]] {}).to(new TypeLiteral[TenantServiceLive[F]] {})
+    val _ = bind(new TypeLiteral[TenantServiceFs2Grpc[F, Metadata]] {}).to(new TypeLiteral[TenantGrpcAdapter[F]] {})
   }
 }

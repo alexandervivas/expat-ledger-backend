@@ -3,7 +3,7 @@ package com.expatledger.tenants.application
 import cats.effect.*
 import cats.syntax.all.*
 import com.expatledger.kernel.application.EventPublisher
-import com.expatledger.kernel.domain.OutboxRepository
+import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.config.OutboxConfig
 import fs2.Stream
 import org.typelevel.log4cats.Logger

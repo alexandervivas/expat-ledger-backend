@@ -2,8 +2,9 @@ package com.expatledger.tenants.application
 
 import java.util.UUID
 import cats.effect.*
+import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.tenants.domain.*
-import com.expatledger.kernel.domain.{OutboxEvent, OutboxRepository}
+import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.domain.model.{Tenant, TenantId}
 import com.expatledger.tenants.domain.repositories.TenantRepository
 import munit.CatsEffectSuite
@@ -18,7 +19,6 @@ class TenantServiceTest extends CatsEffectSuite:
   class MockOutboxRepository extends OutboxRepository[IO]:
     var savedEvent: Option[OutboxEvent] = None
     override def save(event: OutboxEvent): IO[Unit] = IO { savedEvent = Some(event) }
-    override def saveAll(events: List[OutboxEvent]): IO[Unit] = IO.unit
     override def fetchUnprocessed(limit: Int): IO[List[OutboxEvent]] = IO.pure(Nil)
     override def markProcessed(ids: List[java.util.UUID]): IO[Unit] = IO.unit
 

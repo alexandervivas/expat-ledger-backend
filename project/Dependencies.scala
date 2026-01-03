@@ -29,7 +29,7 @@ object Dependencies {
   val flyway     = "org.flywaydb" % "flyway-database-postgresql" % Versions.Flyway
   val postgresql = "org.postgresql" % "postgresql" % Versions.Postgresql
 
-  val pureConfig = "com.github.pureconfig" %% "pureconfig-core" % Versions.PureConfig
+  val pureConfigCore = "com.github.pureconfig" %% "pureconfig-core" % Versions.PureConfig
   val pureConfigIp4s = "com.github.pureconfig" %% "pureconfig-ip4s" % Versions.PureConfig
 
   val http4sEmberServer = "org.http4s" %% "http4s-ember-server" % Versions.Http4s
@@ -58,31 +58,22 @@ object Dependencies {
   val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j" % Versions.Log4cats
   val logback       = "ch.qos.logback" % "logback-classic" % Versions.Logback
 
+  val pureConfig: Seq[ModuleID] = Seq(pureConfigCore, pureConfigIp4s)
+  val http4s: Seq[ModuleID] = Seq(http4sEmberServer, http4sEmberClient, http4sDsl)
+  val tapir: Seq[ModuleID] = Seq(tapirHttp4sServer, tapirJsonCirce)
+  val circe: Seq[ModuleID] = Seq(circeCore, circeGeneric, circeParser)
+  val cloudEvents: Seq[ModuleID] = Seq(cloudEventsCore, cloudEventsJson)
+  val logging: Seq[ModuleID] = Seq(log4catsCore, log4catsSlf4j, logback)
+  val tests: Seq[ModuleID] = Seq(munit, munitCatsEffect)
+
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
-    circeCore,
-    circeGeneric,
-    circeParser,
-    cloudEventsCore,
-    cloudEventsJson,
-    log4catsCore,
-    munit,
-    munitCatsEffect
-  )
+    fs2Rabbit,
+    avro
+  ) ++ circe ++ cloudEvents ++ logging ++ tests
 
-  val apiGatewayDependencies: Seq[ModuleID] = Seq(
-    http4sEmberServer,
-    http4sEmberClient,
-    http4sDsl,
-    tapirHttp4sServer,
-    tapirJsonCirce,
-    pureConfig,
-    pureConfigIp4s,
-    log4catsCore,
-    munit,
-    munitCatsEffect
-  )
+  val apiGatewayDependencies: Seq[ModuleID] = pureConfig ++ http4s ++ tapir
 
   val tenantServiceDependencies: Seq[ModuleID] = Seq(
     catsEffect,
@@ -90,20 +81,7 @@ object Dependencies {
     skunk,
     flyway,
     postgresql,
-    pureConfig,
-    pureConfigIp4s,
-    circeCore,
-    circeGeneric,
-    circeParser,
     guice,
-    fs2Rabbit,
-    avro,
-    cloudEventsCore,
-    cloudEventsJson,
-    log4catsCore,
-    log4catsSlf4j,
-    logback,
-    munit,
-    munitCatsEffect
-  )
+    logback
+  ) ++ pureConfig
 }

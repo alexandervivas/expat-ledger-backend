@@ -1,10 +1,13 @@
 package com.expatledger.tenants.domain.events
 
-import com.expatledger.kernel.domain.{DomainEvent, OutboxEvent}
+import com.expatledger.kernel.domain.events.{DomainEvent, OutboxEvent}
+import com.expatledger.kernel.infrastructure.messaging.AvroSchemaLoader
 import com.expatledger.tenants.domain.model.Tenant
 import io.circe.Codec as CirceCodec
 import io.circe.generic.semiauto.*
 import io.circe.syntax.*
+import org.apache.avro.Schema
+import org.apache.avro.generic.{GenericData, GenericRecord}
 
 import java.time.OffsetDateTime
 import java.util.UUID
@@ -18,18 +21,34 @@ case class TenantCreated(
     override val occurredAt: OffsetDateTime
 ) extends DomainEvent:
   override def eventType: String = "TenantCreated"
+  override def aggregateType: String = "Tenant"
+  override def schemaUrn: String = s"urn:avro:schema:com.expatledger.events.v1.$eventType"
 
   override def toOutboxEvent: OutboxEvent =
     OutboxEvent(
       id = id,
-      aggregateType = "Tenant",
+      aggregateType = aggregateType,
       aggregateId = aggregateId,
       eventType = eventType,
       payload = this.asJson.noSpaces,
-      occurredAt = occurredAt
+      occurredAt = occurredAt,
+      schemaUrn = schemaUrn
     )
 
+  override def avroSchema: Schema = TenantCreated.schema
+
+  override def toAvroRecord: GenericRecord =
+    val record = new GenericData.Record(avroSchema)
+    record.put("eventId", id.toString)
+    record.put("occurredAt", occurredAt.toString)
+    record.put("tenantId", aggregateId.toString)
+    record.put("name", name)
+    record.put("ownerId", "") // TODO: Add ownerId to Tenant model if needed
+    record
+    
 object TenantCreated:
+  val schema: Schema = AvroSchemaLoader.load("tenant-created.avsc")
+
   given CirceCodec[TenantCreated] = deriveCodec
 
   def apply(tenant: Tenant, occurredAt: OffsetDateTime): TenantCreated =

@@ -1,7 +1,7 @@
 package com.expatledger.kernel.domain
 
 import munit.FunSuite
-import com.expatledger.kernel.domain.*
+import com.expatledger.kernel.domain.model.{Amount, Currency, Money}
 
 class MoneySpec extends FunSuite {
 

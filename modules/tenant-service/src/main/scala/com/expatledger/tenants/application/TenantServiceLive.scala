@@ -2,7 +2,8 @@ package com.expatledger.tenants.application
 
 import cats.effect.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.{Currency, OutboxRepository}
+import com.expatledger.kernel.domain.model.Currency
+import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.domain.*
 import com.expatledger.tenants.domain.events.TenantCreated
 import com.expatledger.tenants.domain.model.{TaxResidency, Tenant, TenantId}

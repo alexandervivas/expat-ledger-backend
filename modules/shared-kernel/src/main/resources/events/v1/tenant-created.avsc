@@ -1,0 +1,13 @@
+{
+  "type": "record",
+  "name": "TenantCreated",
+  "namespace": "com.expatledger.events.v1",
+  "doc": "Event emitted when a tenant is created",
+  "fields": [
+    {"name": "eventId", "type": "string"},
+    {"name": "occurredAt", "type": "string", "doc": "ISO-8601 instant"},
+    {"name": "tenantId", "type": "string"},
+    {"name": "name", "type": "string"},
+    {"name": "ownerId", "type": "string"}
+  ]
+}

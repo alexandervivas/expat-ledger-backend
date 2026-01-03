@@ -1,5 +1,9 @@
 # Events v1 — CHANGELOG
 
+## 2026-01-04
+
+- Externalize Avro schemas: Implement `AvroSchemaLoader` in `shared-kernel` to pull schemas directly from `.avsc` files instead of hardcoding them in code.
+
 ## 2026-01-02
 
 - Refactor internal event model in `shared-kernel` to improve type safety:
