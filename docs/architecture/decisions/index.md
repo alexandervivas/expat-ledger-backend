@@ -13,3 +13,7 @@ This index lists all decisions. New ADRs append at the end. Superseded ADRs keep
 - ADR-008 — CloudEvents adoption for domain events (Accepted)
 - ADR-009 — Transition to Scala 3 (Accepted)
 - ADR-010 — Use sbt as the Build Tool (Accepted)
+- ADR-011 — ip4s for Host and Port (Accepted)
+- ADR-012 — Hexagonal Layers and DDD Enforcement (Accepted)
+- ADR-013 — Dependency Injection with Scala 3 Contextual Abstractions (Superseded by ADR-014)
+- ADR-014 — Standardizing Dependency Injection with Google Guice (Accepted)

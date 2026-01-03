@@ -1,20 +1,19 @@
 package com.expatledger.tenants
 
-import cats.effect.*
-import io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder
+import cats.effect.{ExitCode, IO, IOApp, Resource}
 import io.grpc.{Metadata, ServerServiceDefinition}
+
 import java.net.InetSocketAddress
 import com.expatledger.tenant.v1.tenant.*
-import com.expatledger.tenants.config.*
-import com.expatledger.tenants.persistence.DbMigrator
+import com.expatledger.tenants.config.TenantServiceConfig
+import com.expatledger.tenants.infrastructure.di.TenantModule
+import com.expatledger.tenants.infrastructure.persistence.DbMigrator
+import com.google.inject.{Guice, Key, TypeLiteral}
 import skunk.Session
 import natchez.Trace.Implicits.noop
 import pureconfig.ConfigSource
 
 object Main extends IOApp {
-
-  private val tenantService: TenantServiceFs2Grpc[IO, Metadata] = (request: GetTenantRequest, ctx: Metadata) =>
-    IO.pure(GetTenantResponse(id = request.id, name = "Mock Tenant"))
 
   private def loadConfig: IO[TenantServiceConfig] =
     IO.blocking(ConfigSource.default.loadOrThrow[TenantServiceConfig])
@@ -23,7 +22,6 @@ object Main extends IOApp {
     for {
       config <- loadConfig
       _      <- DbMigrator.migrate[IO](config.db)
-
       _      <- IO.println(s"Database migrations completed.")
 
       sessionPool = Session.pooled[IO](
@@ -35,17 +33,25 @@ object Main extends IOApp {
         max = 10
       )
 
-      serviceDefinition: Resource[IO, ServerServiceDefinition] =
-        TenantServiceFs2Grpc.bindServiceResource[IO](tenantService)
+      _ <- sessionPool.use { pool =>
+        pool.use { session =>
 
-      _ <- serviceDefinition.use { service =>
-        IO.blocking {
-          NettyServerBuilder
-            .forAddress(new InetSocketAddress(config.host.toString, config.port.value))
-            .addService(service)
-            .build()
-            .start()
-        } *> IO.println(s"Tenant Service started on ${config.host}:${config.port}") *> IO.never
+          val injector = Guice.createInjector(new TenantModule(session))
+          val grpcService = injector.getInstance(Key.get(new TypeLiteral[TenantServiceFs2Grpc[IO, Metadata]] {}))
+
+          val serviceDefinition: Resource[IO, ServerServiceDefinition] =
+            TenantServiceFs2Grpc.bindServiceResource[IO](grpcService)
+
+          serviceDefinition.use { service =>
+            IO.blocking {
+              io.grpc.netty.shaded.io.grpc.netty.NettyServerBuilder
+                .forAddress(new InetSocketAddress(config.host.toString, config.port.value))
+                .addService(service)
+                .build()
+                .start()
+            } *> IO.println(s"Tenant Service started on ${config.host}:${config.port}") *> IO.never
+          }
+        }
       }
     } yield ExitCode.Success
   }

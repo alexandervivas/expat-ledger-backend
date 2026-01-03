@@ -9,11 +9,3 @@ case class TenantServiceConfig(
     port: Port,
     db: DatabaseConfig
 ) derives ConfigReader
-
-case class DatabaseConfig(
-    host: String,
-    port: Int,
-    name: String,
-    user: String,
-    password: Option[String]
-) derives ConfigReader

@@ -1,4 +1,4 @@
-package com.expatledger.tenants.persistence
+package com.expatledger.tenants.infrastructure.persistence
 
 import cats.effect.*
 import cats.syntax.all.*

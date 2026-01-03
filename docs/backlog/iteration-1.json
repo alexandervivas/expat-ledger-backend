@@ -21,7 +21,7 @@
     {
       "id": "T1.3",
       "title": "Implement 'Onboard Tenant' Use Case",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Implement Hexagonal layers for Tenant creation. Logic must handle the initial tax residency and reporting currency selection."
     },
@@ -35,9 +35,9 @@
     {
       "id": "T1.5",
       "title": "Tenant API gRPC & Gateway Bridge",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
-      "description": "Expand tenant.proto with CreateTenant. Update api-gateway with a Tapir route to proxy the creation request to the service."
+      "description": "Implemented TenantGrpcAdapter to wire TenantService logic to gRPC. Updated Main.scala to use real service implementation via Guice."
     },
     {
       "id": "T1.6",
@@ -94,6 +94,48 @@
       "status": "done",
       "owner": "Junie",
       "description": "Fixed compilation error in Repository.scala caused by using non-existent session.transactional method."
+    },
+    {
+      "id": "T1.16",
+      "title": "Enforce 'One Entity Per File' Rule",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Split multi-model files across the project (domain, events, config, service requests) into individual files to improve maintainability and discoverability."
+    },
+    {
+      "id": "T1.17",
+      "title": "Enforce DDD & Hexagonal Architecture",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Refactor project structure to strictly separate domain, application, and infrastructure layers. Introduce UnitOfWork port and move repository interfaces to the domain."
+    },
+    {
+      "id": "T1.18",
+      "title": "Separate Service Contract from Implementation",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Moved TenantService trait and TenantServiceLive implementation into separate files to improve code organization and support dependency injection."
+    },
+    {
+      "id": "T1.19",
+      "title": "Implement Dependency Injection with Scala 3 Contextual Abstractions",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Introduced a native DI framework using Scala 3's given/using. Refactored TenantService and created TenantContainer for compile-time wiring."
+    },
+    {
+      "id": "T1.20",
+      "title": "Standardize Dependency Injection with Google Guice",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Replaced Scala 3 contextual DI with Google Guice 7.0. Created TenantModule and updated service wiring to use @Inject and constructor injection."
+    },
+    {
+      "id": "T1.21",
+      "title": "Batch Insert Tenant Tax Residencies",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Optimized SkunkTenantRepository to save all tax residencies in a single database round-trip using batch inserts."
     }
   ]
 }
