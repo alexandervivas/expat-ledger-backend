@@ -35,9 +35,9 @@
     {
       "id": "T1.5",
       "title": "Tenant API gRPC & Gateway Bridge",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
-      "description": "Expand tenant.proto with CreateTenant. Update api-gateway with a Tapir route to proxy the creation request to the service."
+      "description": "Implemented TenantGrpcAdapter to wire TenantService logic to gRPC. Updated Main.scala to use real service implementation via Guice."
     },
     {
       "id": "T1.6",

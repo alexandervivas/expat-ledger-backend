@@ -38,3 +38,6 @@ class TenantServiceLive[F[_] : MonadCancelThrow : Sync] @Inject()(
         _ <- outboxRepo.save(outboxEvent)
       yield tenantId
     }
+
+  override def getTenant(id: TenantId): F[Option[Tenant]] =
+    tenantRepo.findById(id)

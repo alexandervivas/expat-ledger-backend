@@ -18,7 +18,7 @@
 | T1.2 | Implement Outbox Pattern Infrastructure | ✅ Done | Junie |
 | T1.3 | Implement 'Onboard Tenant' Use Case | ✅ Done | Junie |
 | T1.4 | Outbox Poller & CloudEvent Publisher | ⏳ Todo | Junie |
-| T1.5 | Tenant API gRPC & Gateway Bridge | ⏳ Todo | Junie |
+| T1.5 | Tenant API gRPC & Gateway Bridge | ✅ Done | Junie |
 | T1.6 | Persistence Integration Test (Testcontainers) | ⏳ Todo | Junie |
 | T1.7 | Consolidate Guidelines | ✅ Done | Junie |
 | T1.8 | Rich Event Model Refactoring | ✅ Done | Junie |
