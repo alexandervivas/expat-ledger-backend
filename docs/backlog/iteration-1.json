@@ -86,7 +86,14 @@
       "title": "Optimize OutboxRepository saveAll performance",
       "status": "done",
       "owner": "Junie",
-      "description": "Group chunks by size in saveAll to minimize prepare calls, typically to just one or two."
+      "description": "Group chunks by size in saveAll to minimize prepare calls."
+    },
+    {
+      "id": "T1.14",
+      "title": "Fix non-atomic transaction in Repository",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Corrected the 'atomic' method in Repository.scala to pass the transactional session to the action instead of the non-transactional one."
     }
   ]
 }

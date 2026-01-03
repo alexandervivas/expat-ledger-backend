@@ -2,13 +2,13 @@ package com.expatledger.tenants.persistence
 
 import cats.effect.MonadCancelThrow
 import com.expatledger.kernel.domain.{DomainEvent, OutboxEvent}
-import skunk.Session
+import skunk.{Session, Transaction}
 
 trait Repository[F[_]]:
   def session: Session[F]
-  
-  def atomic[A](action: Session[F] => F[A])(using F: MonadCancelThrow[F]): F[A] =
-    session.transaction.use(_ => action(session))
+
+  def atomic[A](action: Transaction[F] => F[A])(using F: MonadCancelThrow[F]): F[A] =
+    session.transaction.use(action)
 
   protected def toOutboxEvent(event: DomainEvent, aggType: String, eventPayload: String): OutboxEvent =
     OutboxEvent(

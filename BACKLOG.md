@@ -26,4 +26,5 @@
 | T1.10 | Fix brittle eventType derivation | ✅ Done | Junie |
 | T1.11 | Fix Python Version in .tool-versions | ✅ Done | Junie |
 | T1.13 | Optimize OutboxRepository saveAll performance | ✅ Done | Junie |
+| T1.14 | Fix non-atomic transaction in Repository | ✅ Done | Junie |
 

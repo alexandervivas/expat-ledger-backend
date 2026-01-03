@@ -6,6 +6,7 @@ import skunk.*
 import skunk.implicits.*
 import skunk.codec.all.*
 import com.expatledger.kernel.domain.OutboxEvent
+import fs2.Stream
 
 trait OutboxRepository[F[_]]:
   def save(event: OutboxEvent): F[Unit]
@@ -32,7 +33,7 @@ private object SkunkOutboxRepository:
     """.command
   }
 
-class SkunkOutboxRepository[F[_] : MonadCancelThrow](session: Session[F]) extends OutboxRepository[F]:
+class SkunkOutboxRepository[F[_] : Sync](session: Session[F]) extends OutboxRepository[F]:
 
   import SkunkOutboxRepository.*
 
@@ -40,6 +41,9 @@ class SkunkOutboxRepository[F[_] : MonadCancelThrow](session: Session[F]) extend
     session.execute(insert)(event).void
 
   override def saveAll(events: List[OutboxEvent]): F[Unit] =
-    events.grouped(1000).toList.traverse_ { chunk =>
-      session.execute(insertMany(chunk.length))(chunk)
-    }.void
+    Stream.fromIterator[F](events.grouped(1000), chunkSize = 1)
+      .evalMap { chunk =>
+        session.execute(insertMany(chunk.length))(chunk).void
+      }
+      .compile
+      .drain
