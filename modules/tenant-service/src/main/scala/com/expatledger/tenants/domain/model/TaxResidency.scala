@@ -1,4 +1,4 @@
-package com.expatledger.tenants.domain
+package com.expatledger.tenants.domain.model
 
 import io.circe.Codec as CirceCodec
 import io.circe.generic.semiauto.*

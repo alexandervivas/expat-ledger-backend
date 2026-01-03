@@ -1,17 +1,15 @@
-package com.expatledger.tenants.persistence
+package com.expatledger.tenants.infrastructure.persistence
 
 import cats.effect.*
 import cats.syntax.all.*
 import java.time.OffsetDateTime
-import com.expatledger.tenants.domain.{Tenant, TenantId, TaxResidency}
 import skunk.*
 import skunk.implicits.*
 import skunk.codec.all.*
 import com.expatledger.kernel.domain.Currency
+import com.expatledger.tenants.domain.model.{TaxResidency, Tenant, TenantId}
+import com.expatledger.tenants.domain.repositories.TenantRepository
 
-trait TenantRepository[F[_]]:
-  def save(tenant: Tenant): F[Unit]
-  def findById(id: TenantId): F[Option[Tenant]]
 
 private object SkunkTenantRepository:
   val tenantId: Codec[TenantId] = uuid.imap(TenantId.apply)(identity)

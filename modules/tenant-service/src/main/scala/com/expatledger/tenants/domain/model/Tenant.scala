@@ -1,9 +1,10 @@
-package com.expatledger.tenants.domain
+package com.expatledger.tenants.domain.model
 
-import java.time.OffsetDateTime
 import com.expatledger.kernel.domain.Currency
 import io.circe.Codec as CirceCodec
 import io.circe.generic.semiauto.*
+
+import java.time.OffsetDateTime
 
 case class Tenant(
     id: TenantId,

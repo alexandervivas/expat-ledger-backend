@@ -7,13 +7,14 @@ object Dependencies {
     val Tapir      = "1.13.4"
     val Munit      = "1.2.1"
     val MunitCatsEffect = "2.1.0"
-    val Ip4s        = "3.6.0"
+    val Ip4s        = "3.7.0"
     val Grpc        = "1.78.0"
-    val Skunk       = "0.6.4"
-    val Flyway      = "10.21.0"
-    val Postgresql  = "42.7.4"
-    val PureConfig  = "0.17.8"
+    val Skunk       = "0.6.5"
+    val Flyway      = "11.20.0"
+    val Postgresql  = "42.7.8"
+    val PureConfig  = "0.17.9"
     val Circe       = "0.14.15"
+    val Guice       = "7.0.0"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -41,6 +42,7 @@ object Dependencies {
   val circeCore    = "io.circe" %% "circe-core"    % Versions.Circe
   val circeGeneric = "io.circe" %% "circe-generic" % Versions.Circe
   val circeParser  = "io.circe" %% "circe-parser"  % Versions.Circe
+  val guice        = "com.google.inject" % "guice" % Versions.Guice
 
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
@@ -75,6 +77,7 @@ object Dependencies {
     circeCore,
     circeGeneric,
     circeParser,
+    guice,
     munit,
     munitCatsEffect
   )

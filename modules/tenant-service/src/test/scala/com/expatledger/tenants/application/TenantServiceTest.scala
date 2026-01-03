@@ -1,12 +1,12 @@
-package com.expatledger.tenants.service
+package com.expatledger.tenants.application
 
 import java.util.UUID
 import cats.effect.*
 import com.expatledger.tenants.domain.*
-import com.expatledger.tenants.persistence.{TenantRepository, OutboxRepository, Repository}
-import com.expatledger.kernel.domain.OutboxEvent
+import com.expatledger.kernel.domain.{OutboxEvent, OutboxRepository}
+import com.expatledger.tenants.domain.model.{Tenant, TenantId}
+import com.expatledger.tenants.domain.repositories.TenantRepository
 import munit.CatsEffectSuite
-import skunk.Session
 
 class TenantServiceTest extends CatsEffectSuite:
 
@@ -20,16 +20,16 @@ class TenantServiceTest extends CatsEffectSuite:
     override def save(event: OutboxEvent): IO[Unit] = IO { savedEvent = Some(event) }
     override def saveAll(events: List[OutboxEvent]): IO[Unit] = IO.unit
 
-  class MockBaseRepository extends Repository[IO]:
-    override def session: Session[IO] = null // Not used in atomic mock
-    override def atomic[A](action: Session[IO] => IO[A])(using F: MonadCancelThrow[IO]): IO[A] =
-      action(null)
+  class MockUnitOfWork extends UnitOfWork[IO]:
+    override def atomic[A](action: IO[A])(using F: MonadCancelThrow[IO]): IO[A] =
+      action
 
   test("onboardTenant should save tenant and outbox event") {
     val tenantRepo = new MockTenantRepository
     val outboxRepo = new MockOutboxRepository
-    val baseRepo = new MockBaseRepository
-    val service = new TenantServiceLive[IO](tenantRepo, outboxRepo, baseRepo)
+    val uow = new MockUnitOfWork
+    
+    val service = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow)
 
     val request = OnboardTenantRequest("Test Tenant", "USD", "US")
 

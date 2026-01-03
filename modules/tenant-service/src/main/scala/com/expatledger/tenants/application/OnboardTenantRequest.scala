@@ -1,4 +1,4 @@
-package com.expatledger.tenants.service
+package com.expatledger.tenants.application
 
 case class OnboardTenantRequest(
     name: String,

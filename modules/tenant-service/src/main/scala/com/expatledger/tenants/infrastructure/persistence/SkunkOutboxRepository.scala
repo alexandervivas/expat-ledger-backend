@@ -1,17 +1,13 @@
-package com.expatledger.tenants.persistence
+package com.expatledger.tenants.infrastructure.persistence
 
 import cats.effect.*
 import cats.syntax.all.*
 import skunk.*
 import skunk.implicits.*
 import skunk.codec.all.*
-import com.expatledger.kernel.domain.OutboxEvent
+import com.expatledger.kernel.domain.{OutboxEvent, OutboxRepository}
 import fs2.Stream
 
-trait OutboxRepository[F[_]]:
-  def save(event: OutboxEvent): F[Unit]
-
-  def saveAll(events: List[OutboxEvent]): F[Unit]
 
 private object SkunkOutboxRepository:
   private val encoder: Encoder[OutboxEvent] =

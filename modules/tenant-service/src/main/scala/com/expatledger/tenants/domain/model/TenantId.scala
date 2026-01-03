@@ -1,7 +1,8 @@
-package com.expatledger.tenants.domain
+package com.expatledger.tenants.domain.model
+
+import io.circe.{Codec as CirceCodec, Decoder as CirceDecoder, Encoder as CirceEncoder}
 
 import java.util.UUID
-import io.circe.{Codec as CirceCodec, Decoder as CirceDecoder, Encoder as CirceEncoder}
 
 opaque type TenantId <: UUID = UUID
 object TenantId:

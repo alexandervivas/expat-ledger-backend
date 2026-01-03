@@ -28,4 +28,8 @@
 | T1.13 | Optimize OutboxRepository saveAll performance | ✅ Done | Junie |
 | T1.15 | Fix Skunk transactional compilation error | ✅ Done | Junie |
 | T1.16 | Enforce 'One Entity Per File' Rule | ✅ Done | Junie |
+| T1.17 | Enforce DDD & Hexagonal Architecture | ✅ Done | Junie |
+| T1.18 | Separate Service Contract from Implementation | ✅ Done | Junie |
+| T1.19 | Implement Dependency Injection with Scala 3 Contextual Abstractions | ✅ Done | Junie |
+| T1.20 | Standardize Dependency Injection with Google Guice | ✅ Done | Junie |
 
