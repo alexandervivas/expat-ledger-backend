@@ -6,32 +6,46 @@ import com.expatledger.kernel.application.EventPublisher
 import com.expatledger.kernel.domain.OutboxRepository
 import com.expatledger.tenants.config.OutboxConfig
 import fs2.Stream
+import org.typelevel.log4cats.Logger
+import org.typelevel.log4cats.slf4j.Slf4jLogger
+import scala.concurrent.duration.*
 
-class OutboxPoller[F[_]: Async](
+class OutboxPoller[F[_]](
     outboxRepo: OutboxRepository[F],
     publisher: EventPublisher[F],
     config: OutboxConfig
-):
+)(using F: Async[F]):
+  private val logger: Logger[F] = Slf4jLogger.getLoggerFromName[F]("OutboxPoller")
+
+  private def retry[A](fa: F[A], delay: FiniteDuration, retries: Int): F[A] =
+    fa.handleErrorWith { e =>
+      if retries > 0 then F.sleep(delay) >> retry(fa, delay * 2, retries - 1)
+      else F.raiseError(e)
+    }
+
   def run: Stream[F, Unit] =
     Stream
       .fixedDelay[F](config.pollInterval)
       .evalMap { _ =>
         outboxRepo.fetchUnprocessed(config.batchSize).flatMap { events =>
-          if events.isEmpty then Async[F].unit
+          if events.isEmpty then F.unit
           else
             events
               .traverse { event =>
-                publisher.publish(event).as(Some(event.id)).handleErrorWith { _ =>
-                  Async[F].pure(None) // Tracked in T1.22: Better error handling/logging
-                }
+                retry(publisher.publish(event), 100.millis, 3)
+                  .as(Some(event.id))
+                  .handleErrorWith { e =>
+                    logger.error(e)(s"Failed to publish event ${event.id} after retries").as(None)
+                  }
               }
               .flatMap { publishedIds =>
                 val idsToMark = publishedIds.flatten
                 if idsToMark.nonEmpty then outboxRepo.markProcessed(idsToMark)
-                else Async[F].unit
+                else F.unit
               }
         }
       }
       .handleErrorWith { e =>
-        Stream.exec(Async[F].delay(println(s"Error in outbox poller: ${e.getMessage}"))) ++ run // Restart on error
+        Stream.eval(logger.error(e)("Error in outbox poller")).drain
       }
+      .repeat

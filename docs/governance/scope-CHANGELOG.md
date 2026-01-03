@@ -1,5 +1,26 @@
 # Scope CHANGELOG
 
+## 2026-01-03 — Outbox Poller Enhanced (Error Handling & Logging)
+
+**Summary**
+
+- Refactored `OutboxPoller` to ensure stack safety by replacing recursive restarts with fs2's `.repeat`.
+- Integrated `log4cats` with `slf4j` and `logback` for structured logging across the project.
+- Implemented exponential backoff retries for outbox event publishing.
+
+**Impacts**
+
+- **Reliability**: Improved poller stability for long-running processes; reduced risk of `StackOverflowError`.
+- **Observability**: Structured JSON-ready logging enabled.
+- **Resilience**: Added retries for transient messaging failures.
+
+**Actions**
+
+- Updated `project/Dependencies.scala` with `log4cats` and `logback`.
+- Refactored `modules/tenant-service/src/main/scala/com/expatledger/tenants/application/OutboxPoller.scala`.
+- Created `modules/tenant-service/src/test/scala/com/expatledger/tenants/application/OutboxPollerTest.scala`.
+- Updated `docs/backlog/iteration-1.json` (T1.22 marked as done).
+
 ## 2026-01-03 — Pre-commit Hook Standardized
 
 **Summary**

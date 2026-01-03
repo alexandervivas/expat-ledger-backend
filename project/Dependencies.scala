@@ -18,6 +18,8 @@ object Dependencies {
     val Fs2Rabbit   = "5.5.0"
     val Avro        = "1.12.1"
     val CloudEvents = "4.0.1"
+    val Log4cats    = "2.7.1"
+    val Logback     = "1.5.23"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -52,6 +54,10 @@ object Dependencies {
   val cloudEventsCore = "io.cloudevents" % "cloudevents-core" % Versions.CloudEvents
   val cloudEventsJson = "io.cloudevents" % "cloudevents-json-jackson" % Versions.CloudEvents
 
+  val log4catsCore  = "org.typelevel" %% "log4cats-core"  % Versions.Log4cats
+  val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j" % Versions.Log4cats
+  val logback       = "ch.qos.logback" % "logback-classic" % Versions.Logback
+
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
@@ -60,6 +66,7 @@ object Dependencies {
     circeParser,
     cloudEventsCore,
     cloudEventsJson,
+    log4catsCore,
     munit,
     munitCatsEffect
   )
@@ -72,6 +79,7 @@ object Dependencies {
     tapirJsonCirce,
     pureConfig,
     pureConfigIp4s,
+    log4catsCore,
     munit,
     munitCatsEffect
   )
@@ -92,6 +100,9 @@ object Dependencies {
     avro,
     cloudEventsCore,
     cloudEventsJson,
+    log4catsCore,
+    log4catsSlf4j,
+    logback,
     munit,
     munitCatsEffect
   )

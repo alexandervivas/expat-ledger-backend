@@ -140,9 +140,9 @@
     {
       "id": "T1.22",
       "title": "Enhance Outbox Poller Error Handling & Logging",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
-      "description": "Implement robust error handling for failed event publishing, including retries with exponential backoff and structured logging using log4cats."
+      "description": "Implement robust error handling for failed event publishing, including retries with exponential backoff and structured logging using log4cats. Ensure stack safety by replacing recursive stream restarts with native fs2 operators."
     },
     {
       "id": "T1.23",
