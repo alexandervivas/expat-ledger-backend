@@ -29,9 +29,7 @@ class TenantServiceTest extends CatsEffectSuite:
     val outboxRepo = new MockOutboxRepository
     val uow = new MockUnitOfWork
     
-    val service = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow) {
-      override def getTenant(id: TenantId): IO[Option[Tenant]] = IO.none
-    }
+    val service = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow)
 
     val request = OnboardTenantRequest("Test Tenant", "USD", "US")
 
