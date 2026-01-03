@@ -13,6 +13,7 @@ object Dependencies {
     val Flyway      = "10.21.0"
     val Postgresql  = "42.7.4"
     val PureConfig  = "0.17.8"
+    val Circe       = "0.14.15"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -37,9 +38,16 @@ object Dependencies {
 
   val grpcNettyShaded = "io.grpc" % "grpc-netty-shaded" % Versions.Grpc
 
+  val circeCore    = "io.circe" %% "circe-core"    % Versions.Circe
+  val circeGeneric = "io.circe" %% "circe-generic" % Versions.Circe
+  val circeParser  = "io.circe" %% "circe-parser"  % Versions.Circe
+
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
+    circeCore,
+    circeGeneric,
+    circeParser,
     munit,
     munitCatsEffect
   )
@@ -64,6 +72,9 @@ object Dependencies {
     postgresql,
     pureConfig,
     pureConfigIp4s,
+    circeCore,
+    circeGeneric,
+    circeParser,
     munit,
     munitCatsEffect
   )

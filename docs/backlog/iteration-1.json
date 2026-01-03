@@ -21,7 +21,7 @@
     {
       "id": "T1.3",
       "title": "Implement 'Onboard Tenant' Use Case",
-      "status": "todo",
+      "status": "done",
       "owner": "Junie",
       "description": "Implement Hexagonal layers for Tenant creation. Logic must handle the initial tax residency and reporting currency selection."
     },
@@ -94,6 +94,13 @@
       "status": "done",
       "owner": "Junie",
       "description": "Fixed compilation error in Repository.scala caused by using non-existent session.transactional method."
+    },
+    {
+      "id": "T1.16",
+      "title": "Enforce 'One Entity Per File' Rule",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Split multi-model files across the project (domain, events, config, service requests) into individual files to improve maintainability and discoverability."
     }
   ]
 }

@@ -16,7 +16,7 @@
 | :--- | :--- | :--- | :--- |
 | T1.1 | Setup Skunk Persistence & Flyway | ✅ Done | Junie |
 | T1.2 | Implement Outbox Pattern Infrastructure | ✅ Done | Junie |
-| T1.3 | Implement 'Onboard Tenant' Use Case | ⏳ Todo | Junie |
+| T1.3 | Implement 'Onboard Tenant' Use Case | ✅ Done | Junie |
 | T1.4 | Outbox Poller & CloudEvent Publisher | ⏳ Todo | Junie |
 | T1.5 | Tenant API gRPC & Gateway Bridge | ⏳ Todo | Junie |
 | T1.6 | Persistence Integration Test (Testcontainers) | ⏳ Todo | Junie |
@@ -27,4 +27,5 @@
 | T1.11 | Fix Python Version in .tool-versions | ✅ Done | Junie |
 | T1.13 | Optimize OutboxRepository saveAll performance | ✅ Done | Junie |
 | T1.15 | Fix Skunk transactional compilation error | ✅ Done | Junie |
+| T1.16 | Enforce 'One Entity Per File' Rule | ✅ Done | Junie |
 
