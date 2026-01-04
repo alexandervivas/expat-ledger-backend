@@ -32,7 +32,7 @@ class OutboxPoller[F[_]](
           else
             events
               .traverse { event =>
-                retry(publisher.publish(event), 100.millis, 3)
+                retry(publisher.publish(event), config.retryInitialDelay, config.retryCount)
                   .as(Some(event.id))
                   .handleErrorWith { e =>
                     logger.error(e)(s"Failed to publish event ${event.id} after retries").as(None)

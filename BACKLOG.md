@@ -40,3 +40,4 @@
 | TASK-13 | Fix tenant-service test dependencies                                | ⏳ Todo | Junie |
 | TASK-14 | Refactor EventType to use Enumeratum                                | ⏳ Todo | Junie |
 | TASK-15 | Improve AvroSchemaLoader error handling                             | ⏳ Todo | Junie |
+| TASK-16 | Make OutboxPoller retry parameters configurable                     | ⏳ Todo | Junie |

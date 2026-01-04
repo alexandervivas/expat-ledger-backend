@@ -38,7 +38,12 @@ class OutboxPollerTest extends CatsEffectSuite:
       else
         IO { publishedEvents = publishedEvents :+ event }
 
-  val config = OutboxConfig(pollInterval = 10.millis, batchSize = 10)
+  val config = OutboxConfig(
+    pollInterval = 10.millis,
+    batchSize = 10,
+    retryInitialDelay = 10.millis,
+    retryCount = 2
+  )
 
   test("OutboxPoller should publish events and mark them as processed") {
     val outboxRepo = new MockOutboxRepository

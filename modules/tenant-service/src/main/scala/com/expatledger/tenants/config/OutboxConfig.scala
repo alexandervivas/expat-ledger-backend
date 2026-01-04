@@ -5,5 +5,7 @@ import scala.concurrent.duration.FiniteDuration
 
 case class OutboxConfig(
     pollInterval: FiniteDuration,
-    batchSize: Int
+    batchSize: Int,
+    retryInitialDelay: FiniteDuration,
+    retryCount: Int
 ) derives ConfigReader

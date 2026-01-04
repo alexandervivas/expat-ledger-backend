@@ -185,6 +185,13 @@
       "status": "completed",
       "owner": "Junie",
       "requirement": "Technical Debt"
+    },
+    {
+      "id": "TASK-16",
+      "title": "Make OutboxPoller retry parameters configurable",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt"
     }
   ]
 }

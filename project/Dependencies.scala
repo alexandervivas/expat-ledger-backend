@@ -88,5 +88,5 @@ object Dependencies {
     postgresql,
     guice,
     logback
-  ) ++ pureConfig
+  ) ++ pureConfig ++ tests
 }
