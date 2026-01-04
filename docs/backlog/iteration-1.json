@@ -231,6 +231,14 @@
       "owner": "Junie",
       "requirement": "Quality Standards",
       "description": "Integrated sbt-scoverage, set 90% threshold in build.sbt, and created CI workflow to enforce coverage on PRs."
+    },
+    {
+      "id": "TASK-21",
+      "title": "Fix CI Pipeline sbt Installation",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt",
+      "description": "Added sbt/setup-sbt action to the CI workflow to ensure sbt is available in the runner."
     }
   ]
 }
