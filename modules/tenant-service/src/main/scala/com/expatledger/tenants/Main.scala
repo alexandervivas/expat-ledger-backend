@@ -78,11 +78,11 @@ object Main extends IOApp {
           _ <- rabbit.declareExchange(exchangeName, ExchangeType.Topic)
           _ <- rabbit.bindQueue(queueName, exchangeName, routingKey)
           amqpPublisher <- rabbit.createPublisher[AmqpMessage[Array[Byte]]](exchangeName, routingKey)
-          
+
           outboxRepo = injector.getInstance(Key.get(new TypeLiteral[OutboxRepository[IO]] {}))
           eventPublisher = new RabbitMQPublisher[IO](amqpPublisher)
           poller = new OutboxPoller[IO](outboxRepo, eventPublisher, config.outbox)
-          
+
           _ <- IO.println(s"Outbox Poller started with interval ${config.outbox.pollInterval}")
           _ <- poller.run.compile.drain
         } yield ()
@@ -98,16 +98,16 @@ object Main extends IOApp {
       _ <- IO.println(s"Database migrations starting...")
       _ <- DbMigrator.migrate[IO](config.db)
       _ <- IO.println(s"Database migrations completed.")
-      
+
       _ <- sessionPool(config).use { pool =>
         val injector = Guice.createInjector(new TenantModule(pool))
-        
+
         val mode = args.headOption.getOrElse("all")
-        
+
         mode match {
           case "grpc" => runGrpcServer(config, injector)
           case "poller" => runOutboxPoller(config, injector)
-          case "all" => 
+          case "all" =>
             IO.println("Starting both gRPC server and Outbox Poller...") *>
             (runGrpcServer(config, injector), runOutboxPoller(config, injector)).parTupled.void
           case _ => IO.raiseError(new IllegalArgumentException(s"Unknown mode: $mode. Use 'grpc', 'poller', or 'all'."))

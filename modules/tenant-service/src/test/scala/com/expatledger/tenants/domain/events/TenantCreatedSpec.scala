@@ -19,12 +19,12 @@ class TenantCreatedSpec extends FunSuite:
       updatedAt = OffsetDateTime.now()
     )
     val event = TenantCreated(tenant, OffsetDateTime.now())
-    
+
     val schema = event.avroSchema
     assert(schema != null)
     assertEquals(schema.getName, "TenantCreated")
     assertEquals(schema.getNamespace, "com.expatledger.events.v1")
-    
+
     val record = event.toAvroRecord
     assertEquals(record.get("name").toString, "Test Tenant")
     assertEquals(record.get("tenantId").toString, (tenantId: UUID).toString)

@@ -30,8 +30,8 @@ class OutboxPollerTest extends CatsEffectSuite:
   class MockEventPublisher extends EventPublisher[IO]:
     var publishedEvents: List[OutboxEvent] = Nil
     var failCount = 0
-    
-    override def publish(event: OutboxEvent): IO[Unit] = 
+
+    override def publish(event: OutboxEvent): IO[Unit] =
       if failCount > 0 then
         failCount -= 1
         IO.raiseError(new Exception("Publish failed"))
@@ -43,7 +43,7 @@ class OutboxPollerTest extends CatsEffectSuite:
   test("OutboxPoller should publish events and mark them as processed") {
     val outboxRepo = new MockOutboxRepository
     val publisher = new MockEventPublisher
-    
+
     val event = OutboxEvent(
       id = UUID.randomUUID(),
       aggregateType = "Test",
@@ -53,11 +53,11 @@ class OutboxPollerTest extends CatsEffectSuite:
       schemaUrn = "urn:avro:schema:test",
       occurredAt = java.time.OffsetDateTime.now()
     )
-    
+
     outboxRepo.events = List(event)
-    
+
     val poller = new OutboxPoller[IO](outboxRepo, publisher, config)
-    
+
     poller.run.take(1).compile.drain.map { _ =>
       assertEquals(publisher.publishedEvents.size, 1)
       assertEquals(publisher.publishedEvents.head.id, event.id)
@@ -68,15 +68,15 @@ class OutboxPollerTest extends CatsEffectSuite:
   test("OutboxPoller should handle publish errors and continue") {
     val outboxRepo = new MockOutboxRepository
     val publisher = new MockEventPublisher
-    
+
     val event1 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), EventType.TenantCreated, "{}", "urn:test:1", java.time.OffsetDateTime.now())
     val event2 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), EventType.TenantCreated, "{}", "urn:test:2", java.time.OffsetDateTime.now())
-    
+
     outboxRepo.events = List(event1, event2)
     publisher.failCount = 1 // Fail the first one
-    
+
     val poller = new OutboxPoller[IO](outboxRepo, publisher, config)
-    
+
     poller.run.take(1).compile.drain.map { _ =>
       assertEquals(publisher.publishedEvents.size, 1)
       assertEquals(publisher.publishedEvents.head.id, event2.id)

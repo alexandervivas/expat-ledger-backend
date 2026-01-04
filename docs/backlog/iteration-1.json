@@ -178,6 +178,13 @@
       "status": "completed",
       "owner": "Junie",
       "requirement": "Technical Debt"
+    },
+    {
+      "id": "TASK-15",
+      "title": "Improve AvroSchemaLoader error handling",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt"
     }
   ]
 }

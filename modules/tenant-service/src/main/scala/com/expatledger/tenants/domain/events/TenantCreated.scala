@@ -44,7 +44,7 @@ case class TenantCreated(
     record.put("tenantId", aggregateId.toString)
     record.put("name", name)
     record
-    
+
 object TenantCreated:
   val schema: Schema = AvroSchemaLoader.load("tenant-created.avsc")
 

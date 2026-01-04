@@ -1,5 +1,23 @@
 # Scope CHANGELOG
 
+## 2026-01-04 — Improved AvroSchemaLoader Error Handling
+
+**Summary**
+
+- Replaced generic `RuntimeException` with `java.io.FileNotFoundException` when an Avro schema file is missing in the classpath.
+- Added unit tests for `AvroSchemaLoader`.
+
+**Impacts**
+
+- **Maintainability**: Better error context for debugging missing schema files.
+- **Robustness**: Added test coverage for infrastructure messaging components.
+
+**Actions**
+
+- Modified `modules/shared-kernel/src/main/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoader.scala`.
+- Created `modules/shared-kernel/src/test/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoaderSpec.scala`.
+- Updated `docs/backlog/iteration-1.json` (TASK-15 marked as completed).
+
 ## 2026-01-04 — Refactored EventType to use Enumeratum
 
 **Summary**
