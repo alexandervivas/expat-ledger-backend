@@ -18,7 +18,7 @@
 
 ## 2025-10-15
 
-- Introduce `tenant.created.v1` with fields: eventId, occurredAt, tenantId, name, ownerId. Reason: enable event-sourced projections and cross-service integration when a tenant is created.
+- Introduce `tenant.created.v1` with fields: eventId, occurredAt, tenantId, name. Reason: enable event-sourced projections and cross-service integration when a tenant is created.
 - Introduce `user.created.v1` with fields: eventId, occurredAt, userId, name, email. Reason: enable event-sourced projections and cross-service integration when a user is created.
 
 ## 2025-09-29

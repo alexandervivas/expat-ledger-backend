@@ -5,7 +5,7 @@ import com.expatledger.kernel.infrastructure.messaging.CloudEventHeaderBuilder
 import cats.effect.Sync
 import dev.profunktor.fs2rabbit.model.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.events.OutboxEvent
+import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
 import io.circe.parser.decode
 import com.expatledger.tenants.domain.events.TenantCreated
 import com.expatledger.kernel.infrastructure.messaging.AvroSerializer
@@ -28,8 +28,7 @@ class RabbitMQPublisher[F[_]: Sync](
 
   private def serializePayload(event: OutboxEvent): Array[Byte] =
     event.eventType match
-      case "TenantCreated" =>
+      case EventType.TenantCreated =>
         decode[TenantCreated](event.payload) match
           case Right(tc) => AvroSerializer.serialize(tc.toAvroRecord, tc.avroSchema)
           case Left(err) => throw new RuntimeException(s"Failed to decode TenantCreated: $err")
-      case _ => throw new RuntimeException(s"Unknown event type: ${event.eventType}")

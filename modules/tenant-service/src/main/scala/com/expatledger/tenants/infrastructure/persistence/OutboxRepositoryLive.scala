@@ -2,7 +2,7 @@ package com.expatledger.tenants.infrastructure.persistence
 
 import cats.effect.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.events.OutboxEvent
+import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import skunk.*
 import skunk.codec.all.*
@@ -11,8 +11,10 @@ import skunk.syntax.all.*
 import java.util.UUID
 
 private object OutboxRepositoryLive {
+  private val eventType: Codec[EventType] = varchar.imap(EventType.withName)(_.entryName)
+
   private val codec: Codec[OutboxEvent] =
-    (uuid *: varchar *: uuid *: varchar *: varchar *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
+    (uuid *: varchar *: uuid *: eventType *: varchar *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
       case id *: aggregateType *: aggregateId *: eventType *: payload *: schemaUrn *: occurredAt *: EmptyTuple =>
         OutboxEvent(id, aggregateType, aggregateId, eventType, payload, schemaUrn, occurredAt)
     }(outboxEvent => outboxEvent.id *: outboxEvent.aggregateType *: outboxEvent.aggregateId *: outboxEvent.eventType *: outboxEvent.payload *: outboxEvent.schemaUrn *: outboxEvent.occurredAt *: EmptyTuple)

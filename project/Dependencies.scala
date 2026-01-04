@@ -20,6 +20,7 @@ object Dependencies {
     val CloudEvents = "4.0.1"
     val Log4cats    = "2.7.1"
     val Logback     = "1.5.23"
+    val Enumeratum  = "1.9.2"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -58,12 +59,16 @@ object Dependencies {
   val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j" % Versions.Log4cats
   val logback       = "ch.qos.logback" % "logback-classic" % Versions.Logback
 
+  val enumeratum    = "com.beachape" %% "enumeratum" % Versions.Enumeratum
+  val enumeratumCirce = "com.beachape" %% "enumeratum-circe" % Versions.Enumeratum
+
   val pureConfig: Seq[ModuleID] = Seq(pureConfigCore, pureConfigIp4s)
   val http4s: Seq[ModuleID] = Seq(http4sEmberServer, http4sEmberClient, http4sDsl)
   val tapir: Seq[ModuleID] = Seq(tapirHttp4sServer, tapirJsonCirce)
   val circe: Seq[ModuleID] = Seq(circeCore, circeGeneric, circeParser)
   val cloudEvents: Seq[ModuleID] = Seq(cloudEventsCore, cloudEventsJson)
   val logging: Seq[ModuleID] = Seq(log4catsCore, log4catsSlf4j, logback)
+  val enums: Seq[ModuleID] = Seq(enumeratum, enumeratumCirce)
   val tests: Seq[ModuleID] = Seq(munit, munitCatsEffect)
 
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
@@ -71,7 +76,7 @@ object Dependencies {
     ip4s,
     fs2Rabbit,
     avro
-  ) ++ circe ++ cloudEvents ++ logging ++ tests
+  ) ++ circe ++ cloudEvents ++ logging ++ enums ++ tests
 
   val apiGatewayDependencies: Seq[ModuleID] = pureConfig ++ http4s ++ tapir
 

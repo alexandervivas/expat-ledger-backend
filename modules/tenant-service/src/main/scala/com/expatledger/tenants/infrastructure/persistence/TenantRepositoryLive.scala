@@ -27,8 +27,8 @@ private object TenantRepositoryLive {
          VALUES $codec
        """.command
 
-  private def insertTaxResidencies(size: Int): Command[List[TenantId ~ String]] =
-    val encoder = (tenantId ~ varchar(2)).values.list(size)
+  private def insertTaxResidencies(size: Int): Command[List[TenantId *: String *: EmptyTuple]] =
+    val encoder = (tenantId *: varchar(2) *: EmptyTuple).tupled.values.list(size)
     sql"INSERT INTO tenant_tax_residency (tenant_id, country_code) VALUES $encoder".command
 
   private val selectTenantById: Query[TenantId, Tenant] =

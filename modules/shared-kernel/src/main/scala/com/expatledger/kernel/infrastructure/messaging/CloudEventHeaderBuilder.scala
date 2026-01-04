@@ -11,7 +11,7 @@ object CloudEventHeaderBuilder:
       "ce_specversion" := "1.0",
       "ce_id" := event.id.toString,
       "ce_source" := source,
-      "ce_type" := event.eventType,
+      "ce_type" := event.eventType.entryName,
       "ce_time" := event.occurredAt.atZoneSameInstant(ZoneOffset.UTC).toString,
       "ce_datacontenttype" := "application/avro",
       "ce_dataschema" := event.schemaUrn

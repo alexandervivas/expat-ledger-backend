@@ -197,7 +197,7 @@ Notes:
 
 - Events are serialized as Avro GenericRecord objects using contracts under `docs/contracts/events/v1`.
 - Current events:
-  - tenant.created.v1 → schema fields: eventId, occurredAt, tenantId, name, ownerId
+  - tenant.created.v1 → schema fields: eventId, occurredAt, tenantId, name
   - user.created.v1 → schema fields: eventId, occurredAt, userId, name, email
 - The tenants service ships the same `.avsc` files in its classpath (`modules/tenants/src/main/resources/contracts/events/v1/`) to ensure runtime availability.
 - See `docs/contracts/events/v1/CHANGELOG.md` for versioning decisions and changes (see also ADR-003).

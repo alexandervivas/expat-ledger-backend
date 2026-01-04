@@ -157,6 +157,27 @@
       "status": "done",
       "owner": "Junie",
       "description": "Refactor DomainEvents to load Avro schemas from external .avsc files instead of hardcoding them as JSON strings. Implement AvroSchemaLoader in shared-kernel."
+    },
+    {
+      "id": "TASK-12",
+      "title": "Remove owner concept from tenant creation",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "FR-1"
+    },
+    {
+      "id": "TASK-13",
+      "title": "Fix tenant-service test dependencies",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt"
+    },
+    {
+      "id": "TASK-14",
+      "title": "Refactor EventType to use Enumeratum",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt"
     }
   ]
 }

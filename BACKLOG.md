@@ -36,4 +36,7 @@
 | T1.22 | Enhance Outbox Poller Error Handling & Logging | ✅ Done | Junie |
 | T1.23 | Fix and Standardize Pre-commit Hook Setup | ✅ Done | Junie |
 | T1.24 | Decouple Event Schemas from Code | ✅ Done | Junie |
+| TASK-12 | Remove owner concept from tenant creation | ⏳ Todo | Junie |
+| TASK-13 | Fix tenant-service test dependencies | ⏳ Todo | Junie |
+| TASK-14 | Refactor EventType to use Enumeratum | ⏳ Todo | Junie |
 

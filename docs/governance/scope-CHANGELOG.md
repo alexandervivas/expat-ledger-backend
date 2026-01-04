@@ -1,5 +1,28 @@
 # Scope CHANGELOG
 
+## 2026-01-04 — Refactored EventType to use Enumeratum
+
+**Summary**
+
+- Replaced hardcoded string-based `eventType` with an `enumeratum` enum `EventType`.
+- Improved type safety in `OutboxEvent` and `DomainEvent`.
+- Updated `RabbitMQPublisher` to use exhaustive pattern matching on `EventType`.
+- Implemented a Skunk codec for `EventType` to handle database persistence.
+
+**Impacts**
+
+- **Type Safety**: Reduced risk of runtime errors due to typoed event names.
+- **Maintainability**: Centralized event type definitions in `EventType` enum.
+- **Interoperability**: Maintained string-based representation for external messaging (CloudEvents) while using rich types internally.
+
+**Actions**
+
+- Added `enumeratum` and `enumeratum-circe` to `project/Dependencies.scala`.
+- Created `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventType.scala`.
+- Updated `DomainEvent` and `OutboxEvent` in `shared-kernel`.
+- Updated `RabbitMQPublisher`, `OutboxRepositoryLive`, and `TenantCreated` in `tenant-service`.
+- Fixed missing test dependencies in `apiGatewayDependencies` and `tenantServiceDependencies`.
+
 ## 2026-01-03 — Outbox Poller Enhanced (Error Handling & Logging)
 
 **Summary**
