@@ -1,5 +1,29 @@
 # Scope CHANGELOG
 
+## 2026-01-04 — Adopted Manual Dependency Injection
+
+**Summary**
+
+- Discarded Google Guice in favor of **Manual Dependency Injection** orchestrated through a "Resource Tree".
+- Removed `guice` and `jakarta.inject` dependencies.
+- Refactored `TenantServiceLive` and `TenantGrpcAdapter` to use plain constructor injection without annotations.
+- Updated `Main.scala` to perform explicit component wiring within the `cats.effect.Resource` lifecycle.
+
+**Impacts**
+
+- **Type Safety**: 100% compile-time safety for dependency wiring.
+- **Resource Management**: Guaranteed cleanup of database pools and other resources.
+- **Maintainability**: Improved transparency of the dependency graph; removed reflection-based "magic".
+
+**Actions**
+
+- Created `docs/architecture/decisions/ADR-015-manual-dependency-injection.md`.
+- Updated `docs/architecture/decisions/ADR-014-google-guice-standardization.md` (marked as superseded).
+- Modified `project/Dependencies.scala` to remove Guice.
+- Refactored `Main.scala`, `TenantServiceLive.scala`, and `TenantGrpcAdapter.scala` in `tenant-service`.
+- Deleted `TenantModule.scala`.
+- Updated `docs/backlog/iteration-1.json` (T1.25 marked as done).
+
 ## 2026-01-04 — Improved AvroSchemaLoader Error Handling
 
 **Summary**

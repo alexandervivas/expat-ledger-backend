@@ -16,4 +16,5 @@ This index lists all decisions. New ADRs append at the end. Superseded ADRs keep
 - ADR-011 — ip4s for Host and Port (Accepted)
 - ADR-012 — Hexagonal Layers and DDD Enforcement (Accepted)
 - ADR-013 — Dependency Injection with Scala 3 Contextual Abstractions (Superseded by ADR-014)
-- ADR-014 — Standardizing Dependency Injection with Google Guice (Accepted)
+- ADR-014 — Standardizing Dependency Injection with Google Guice (Superseded by ADR-015)
+- ADR-015 — Manual Dependency Injection with Resource-safe Modules (Accepted)

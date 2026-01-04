@@ -128,7 +128,14 @@
       "title": "Standardize Dependency Injection with Google Guice",
       "status": "done",
       "owner": "Junie",
-      "description": "Replaced Scala 3 contextual DI with Google Guice 7.0. Created TenantModule and updated service wiring to use @Inject and constructor injection."
+      "description": "Replaced Scala 3 contextual DI with Google Guice 7.0. Created TenantModule and updated service wiring to use @Inject and constructor injection. (Superseded by T1.25)"
+    },
+    {
+      "id": "T1.25",
+      "title": "Adopt Manual Dependency Injection",
+      "status": "done",
+      "owner": "Junie",
+      "description": "Discarded Google Guice in favor of manual wiring to ensure 100% compile-time safety and resource integrity with cats-effect."
     },
     {
       "id": "T1.21",

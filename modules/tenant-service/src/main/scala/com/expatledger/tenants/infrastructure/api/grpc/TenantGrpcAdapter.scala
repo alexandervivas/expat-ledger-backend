@@ -6,10 +6,9 @@ import io.grpc.Metadata
 import _root_.com.expatledger.tenant.v1.tenant.*
 import com.expatledger.tenants.application.TenantService
 import com.expatledger.tenants.domain.model.TenantId
-import jakarta.inject.Inject
 import java.util.UUID
 
-class TenantGrpcAdapter[F[_]: Async] @Inject()(tenantService: TenantService[F]) extends TenantServiceFs2Grpc[F, Metadata] {
+class TenantGrpcAdapter[F[_]: Async](tenantService: TenantService[F]) extends TenantServiceFs2Grpc[F, Metadata] {
 
   override def getTenant(request: GetTenantRequest, ctx: Metadata): F[GetTenantResponse] = {
     val tenantId = TenantId(UUID.fromString(request.id))

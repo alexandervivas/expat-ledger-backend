@@ -10,9 +10,9 @@ import java.net.InetSocketAddress
 import _root_.com.expatledger.tenant.v1.tenant.*
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.config.{RabbitMQConfig, TenantServiceConfig}
-import com.expatledger.tenants.infrastructure.di.TenantModule
-import com.expatledger.tenants.infrastructure.persistence.DbMigrator
-import com.google.inject.{Guice, Key, TypeLiteral}
+import com.expatledger.tenants.infrastructure.persistence.{DbMigrator, OutboxRepositoryLive, SkunkUnitOfWork, TenantRepositoryLive}
+import com.expatledger.tenants.infrastructure.api.grpc.TenantGrpcAdapter
+import com.expatledger.tenants.application.TenantServiceLive
 import skunk.Session
 import natchez.Trace.Implicits.noop
 import pureconfig.ConfigSource
@@ -50,8 +50,7 @@ object Main extends IOApp {
     )
     RabbitClient.default[IO](rabbitConfig).resource
 
-  private def runGrpcServer(config: TenantServiceConfig, injector: com.google.inject.Injector): IO[Unit] = {
-    val grpcService = injector.getInstance(Key.get(new TypeLiteral[TenantServiceFs2Grpc[IO, Metadata]] {}))
+  private def runGrpcServer(config: TenantServiceConfig, grpcService: TenantServiceFs2Grpc[IO, Metadata]): IO[Unit] = {
     val serviceDefinition: Resource[IO, ServerServiceDefinition] =
       TenantServiceFs2Grpc.bindServiceResource[IO](grpcService)
 
@@ -66,7 +65,7 @@ object Main extends IOApp {
     }
   }
 
-  private def runOutboxPoller(config: TenantServiceConfig, injector: com.google.inject.Injector): IO[Unit] = {
+  private def runOutboxPoller(config: TenantServiceConfig, outboxRepo: OutboxRepository[IO]): IO[Unit] = {
     setupRabbitMQ(config.rabbitmq).use { rabbit =>
       val exchangeName = ExchangeName(config.rabbitmq.exchange)
       val routingKey = RoutingKey(config.rabbitmq.routingKey)
@@ -79,7 +78,6 @@ object Main extends IOApp {
           _ <- rabbit.bindQueue(queueName, exchangeName, routingKey)
           amqpPublisher <- rabbit.createPublisher[AmqpMessage[Array[Byte]]](exchangeName, routingKey)
 
-          outboxRepo = injector.getInstance(Key.get(new TypeLiteral[OutboxRepository[IO]] {}))
           eventPublisher = new RabbitMQPublisher[IO](amqpPublisher)
           poller = new OutboxPoller[IO](outboxRepo, eventPublisher, config.outbox)
 
@@ -100,16 +98,20 @@ object Main extends IOApp {
       _ <- IO.println(s"Database migrations completed.")
 
       _ <- sessionPool(config).use { pool =>
-        val injector = Guice.createInjector(new TenantModule(pool))
+        val tenantRepo = new TenantRepositoryLive[IO](pool)
+        val outboxRepo = new OutboxRepositoryLive[IO](pool)
+        val uow = new SkunkUnitOfWork[IO](pool)
+        val tenantService = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow)
+        val grpcService = new TenantGrpcAdapter[IO](tenantService)
 
         val mode = args.headOption.getOrElse("all")
 
         mode match {
-          case "grpc" => runGrpcServer(config, injector)
-          case "poller" => runOutboxPoller(config, injector)
+          case "grpc" => runGrpcServer(config, grpcService)
+          case "poller" => runOutboxPoller(config, outboxRepo)
           case "all" =>
             IO.println("Starting both gRPC server and Outbox Poller...") *>
-            (runGrpcServer(config, injector), runOutboxPoller(config, injector)).parTupled.void
+            (runGrpcServer(config, grpcService), runOutboxPoller(config, outboxRepo)).parTupled.void
           case _ => IO.raiseError(new IllegalArgumentException(s"Unknown mode: $mode. Use 'grpc', 'poller', or 'all'."))
         }
       }

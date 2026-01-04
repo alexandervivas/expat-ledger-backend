@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted — 2026-01-03
+Superseded by [ADR-015](ADR-015-manual-dependency-injection.md) — 2026-01-04
 
 ## Context
 
