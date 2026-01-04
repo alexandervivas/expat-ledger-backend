@@ -20,8 +20,12 @@ class OutboxPoller[F[_]](
   private def retry[A](fa: F[A], delay: FiniteDuration, retries: Int): F[A] =
     def loop(currentDelay: FiniteDuration, remaining: Int): F[A] =
       fa.handleErrorWith { e =>
-        if remaining > 0 then F.sleep(currentDelay) >> loop(currentDelay * 2, remaining - 1)
-        else F.raiseError(e)
+        if remaining > 0 then
+          logger.warn(e)(s"Operation failed, retrying in $currentDelay. Retries left: $remaining") *>
+            F.sleep(currentDelay) *>
+            loop(currentDelay * 2, remaining - 1)
+        else
+          F.raiseError(e)
       }
     loop(delay, retries)
 
