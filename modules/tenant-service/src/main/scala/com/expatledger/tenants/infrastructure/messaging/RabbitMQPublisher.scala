@@ -11,11 +11,17 @@ class RabbitMQPublisher[F[_]: Sync](
 ) extends EventPublisher[F]:
 
   override def publish(event: OutboxEvent): F[Unit] = {
-    val headers = CloudEventHeaderBuilder.buildHeaders(event, "tenants-service")
-    val props = AmqpProperties.empty.copy(
-      headers = headers,
-      contentEncoding = Some("UTF-8"),
-      contentType = Some("application/avro")
-    )
-    publisher(AmqpMessage(event.avroPayload, props))
+    if (event.avroPayload.isEmpty) {
+      Sync[F].raiseError[Unit](
+        new IllegalStateException(s"Event ${event.id} has an empty avroPayload and fallback serialization is not implemented.")
+      )
+    } else {
+      val headers = CloudEventHeaderBuilder.buildHeaders(event, "tenants-service")
+      val props = AmqpProperties.empty.copy(
+        headers = headers,
+        contentEncoding = Some("UTF-8"),
+        contentType = Some("application/avro")
+      )
+      publisher(AmqpMessage(event.avroPayload, props))
+    }
   }
