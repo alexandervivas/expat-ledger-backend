@@ -11,4 +11,11 @@ class AvroSchemaLoaderSpec extends FunSuite {
       AvroSchemaLoader.load(schemaName)
     }
   }
+
+  test("load should load an existing schema file from classpath") {
+    val schemaName = "tenant-created.avsc"
+    val schema = AvroSchemaLoader.load(schemaName)
+    assertEquals(schema.getName, "TenantCreated")
+    assertEquals(schema.getNamespace, "com.expatledger.events.v1")
+  }
 }

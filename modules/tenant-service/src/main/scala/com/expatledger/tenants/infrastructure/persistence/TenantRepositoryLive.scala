@@ -17,14 +17,14 @@ private object TenantRepositoryLive {
   private val currency: Codec[Currency] = varchar(3).imap(Currency.apply)(identity)
 
   private val codec: Codec[Tenant] =
-    (tenantId *: varchar *: currency *: timestamptz *: timestamptz *: EmptyTuple).tupled.imap {
+    (tenantId *: text *: currency *: timestamptz *: timestamptz *: EmptyTuple).tupled.imap {
       case id *: name *: reportingCurrency *: createdAt *: updatedAt *: EmptyTuple => Tenant(id, name, reportingCurrency, Set.empty, createdAt, updatedAt)
     }(tenant => tenant.id *: tenant.name *: tenant.reportingCurrency *: tenant.createdAt *: tenant.updatedAt *: EmptyTuple)
 
   private val insertTenant: Command[Tenant] =
     sql"""
          INSERT INTO tenant (id, name, reporting_currency, created_at, updated_at)
-         VALUES $codec
+         VALUES ($codec)
        """.command
 
   private def insertTaxResidencies(size: Int): Command[List[TenantId *: String *: EmptyTuple]] =

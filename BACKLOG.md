@@ -47,3 +47,4 @@
 | TASK-19 | Make RabbitMQ SSL configurable                                      | ⏳ Todo | Junie |
 | TASK-20 | Enforce 90% Test Coverage                                           | ⏳ Todo | Junie |
 | TASK-21 | Fix CI Pipeline sbt Installation                                    | ⏳ Todo | Junie |
+| TASK-22 | Fix OutboxPoller error propagation                                  | ⏳ Todo | Junie |

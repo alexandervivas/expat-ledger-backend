@@ -20,6 +20,7 @@ object Dependencies {
     val Log4cats    = "2.7.1"
     val Logback     = "1.5.23"
     val Enumeratum  = "1.9.2"
+    val Testcontainers = "0.44.1"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -60,6 +61,9 @@ object Dependencies {
   val enumeratum    = "com.beachape" %% "enumeratum" % Versions.Enumeratum
   val enumeratumCirce = "com.beachape" %% "enumeratum-circe" % Versions.Enumeratum
 
+  val testcontainers = "com.dimafeng" %% "testcontainers-scala-munit" % Versions.Testcontainers % Test
+  val testcontainersPostgres = "com.dimafeng" %% "testcontainers-scala-postgresql" % Versions.Testcontainers % Test
+
   val pureConfig: Seq[ModuleID] = Seq(pureConfigCore, pureConfigIp4s)
   val http4s: Seq[ModuleID] = Seq(http4sEmberServer, http4sEmberClient, http4sDsl)
   val tapir: Seq[ModuleID] = Seq(tapirHttp4sServer, tapirJsonCirce)
@@ -67,7 +71,7 @@ object Dependencies {
   val cloudEvents: Seq[ModuleID] = Seq(cloudEventsCore, cloudEventsJson)
   val logging: Seq[ModuleID] = Seq(log4catsCore, log4catsSlf4j, logback)
   val enums: Seq[ModuleID] = Seq(enumeratum, enumeratumCirce)
-  val tests: Seq[ModuleID] = Seq(munit, munitCatsEffect)
+  val tests: Seq[ModuleID] = Seq(munit, munitCatsEffect, testcontainers, testcontainersPostgres)
 
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,

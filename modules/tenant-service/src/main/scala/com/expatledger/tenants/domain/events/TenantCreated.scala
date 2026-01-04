@@ -30,7 +30,7 @@ case class TenantCreated(
       aggregateType = aggregateType,
       aggregateId = aggregateId,
       eventType = eventType,
-      payload = this.asJson.noSpaces,
+      payload = this.asJson,
       avroPayload = AvroSerializer.serialize(toAvroRecord, avroSchema),
       occurredAt = occurredAt,
       schemaUrn = schemaUrn

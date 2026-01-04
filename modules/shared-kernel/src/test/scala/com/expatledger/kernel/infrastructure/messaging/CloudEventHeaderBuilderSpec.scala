@@ -4,6 +4,7 @@ import com.expatledger.kernel.domain.events.OutboxEvent
 import munit.FunSuite
 import java.time.OffsetDateTime
 import java.util.UUID
+import io.circe.Json
 
 class CloudEventHeaderBuilderSpec extends FunSuite:
 
@@ -13,7 +14,7 @@ class CloudEventHeaderBuilderSpec extends FunSuite:
       aggregateType = "TestAggregate",
       aggregateId = UUID.randomUUID(),
       eventType = "TestEvent",
-      payload = "{}",
+      payload = Json.obj("test" -> Json.fromString("test")),
       avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:test:schema",
       occurredAt = OffsetDateTime.parse("2023-10-27T10:15:30Z")

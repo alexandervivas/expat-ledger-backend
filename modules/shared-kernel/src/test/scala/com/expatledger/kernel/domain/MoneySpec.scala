@@ -16,7 +16,7 @@ class MoneySpec extends FunSuite {
     val m1 = Money.usd(100.00)
     val m2 = Money.eur(50.50)
     val result = m1 + m2
-    assert(result.isLeft)
+    assertEquals(result, Left("Cannot add different currencies: USD and EUR"))
   }
 
   test("Money subtraction with same currency") {
@@ -26,10 +26,23 @@ class MoneySpec extends FunSuite {
     assertEquals(result, Right(Money.usd(49.50)))
   }
 
+  test("Money subtraction with different currencies should fail") {
+    val m1 = Money.usd(100.00)
+    val m2 = Money.eur(50.50)
+    val result = m1 - m2
+    assertEquals(result, Left("Cannot subtract different currencies: USD and EUR"))
+  }
+
   test("Money multiplication") {
     val m1 = Money.usd(100.00)
     val result = m1 * 1.5
     assertEquals(result, Money.usd(150.00))
+  }
+
+  test("Money COP creation") {
+    val m = Money.cop(1000.00)
+    assertEquals(m.currency, Currency("COP"))
+    assertEquals(m.amount: BigDecimal, BigDecimal(1000.00))
   }
 
   test("Amount rounding") {

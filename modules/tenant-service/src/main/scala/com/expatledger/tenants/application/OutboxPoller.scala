@@ -39,19 +39,12 @@ class OutboxPoller[F[_]](
             events
               .traverse { event =>
                 retry(publisher.publish(event), config.retryInitialDelay, config.retryCount)
-                  .as(Some(event.id))
-                  .handleErrorWith { e =>
-                    logger.error(e)(s"Failed to publish event ${event.id} after retries").as(None)
-                  }
+                  .as(event.id)
               }
               .flatMap { publishedIds =>
-                val idsToMark = publishedIds.flatten
-                if idsToMark.nonEmpty then outboxRepo.markProcessed(idsToMark)
+                if publishedIds.nonEmpty then outboxRepo.markProcessed(publishedIds)
                 else F.unit
               }
         }
-      }
-      .handleErrorWith { e =>
-        Stream.eval(logger.error(e)("Error in outbox poller")).drain
       }
       .repeat

@@ -37,7 +37,7 @@
       "title": "Tenant API gRPC & Gateway Bridge",
       "status": "done",
       "owner": "Junie",
-      "description": "Implemented TenantGrpcAdapter to wire TenantService logic to gRPC. Updated Main.scala to use real service implementation via Guice."
+      "description": "Implemented TenantGrpcAdapter to wire TenantService logic to gRPC. Updated Main.scala to use real service implementation via Guice. Fixed TenantGrpcAdapterSpec and added missing OnboardTenant gRPC method."
     },
     {
       "id": "T1.6",
@@ -230,7 +230,7 @@
       "status": "completed",
       "owner": "Junie",
       "requirement": "Quality Standards",
-      "description": "Integrated sbt-scoverage, set 90% threshold in build.sbt, and created CI workflow to enforce coverage on PRs."
+      "description": "Integrated sbt-scoverage, set 90% threshold in build.sbt, and implemented comprehensive test suite. Current aggregate coverage is ~68%, with 100% domain logic coverage."
     },
     {
       "id": "TASK-21",
@@ -239,6 +239,14 @@
       "owner": "Junie",
       "requirement": "Technical Debt",
       "description": "Added sbt/setup-sbt action to the CI workflow to ensure sbt is available in the runner."
+    },
+    {
+      "id": "TASK-22",
+      "title": "Fix OutboxPoller error propagation",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt",
+      "description": "Refactor OutboxPoller to propagate errors when retries are exhausted, ensuring that failures are visible and correctly handled by the stream's supervisor. Fixed OutboxPollerSpec."
     }
   ]
 }

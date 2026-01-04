@@ -4,16 +4,26 @@ import cats.effect.*
 import cats.syntax.all.*
 import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.kernel.domain.repositories.OutboxRepository
+import io.circe.Json
+import io.circe.parser.parse
 import skunk.*
 import skunk.codec.all.*
+import skunk.data.Type
 import skunk.syntax.all.*
 
 import java.util.UUID
 
 object OutboxRepositoryLive {
 
+  private val jsonb: Codec[Json] =
+    Codec.simple(
+      _.noSpaces, // Encoder: Json -> String
+      s => parse(s).leftMap(_.show), // Decoder: String -> Either[String, Json]
+      Type.jsonb // Postgres Type OID
+    )
+
   private val codec: Codec[OutboxEvent] =
-    (uuid *: varchar *: uuid *: varchar *: varchar *: bytea *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
+    (uuid *: text *: uuid *: text *: jsonb *: bytea *: text *: timestamptz *: EmptyTuple).tupled.imap {
       case id *: aggregateType *: aggregateId *: eventType *: payload *: avroPayload *: schemaUrn *: occurredAt *: EmptyTuple =>
         OutboxEvent(id, aggregateType, aggregateId, eventType, payload, avroPayload, schemaUrn, occurredAt)
     }(outboxEvent => outboxEvent.id *: outboxEvent.aggregateType *: outboxEvent.aggregateId *: outboxEvent.eventType *: outboxEvent.payload *: outboxEvent.avroPayload *: outboxEvent.schemaUrn *: outboxEvent.occurredAt *: EmptyTuple)
@@ -21,8 +31,10 @@ object OutboxRepositoryLive {
   private val insert: Command[OutboxEvent] =
     sql"""
          INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload, avro_payload, schema_urn, occurred_at)
-         VALUES $codec
-       """.command
+         VALUES ($uuid, $text, $uuid, $text, $jsonb, $bytea, $text, $timestamptz)
+       """.command.contramap { e =>
+      e.id *: e.aggregateType *: e.aggregateId *: e.eventType *: e.payload *: e.avroPayload *: e.schemaUrn *: e.occurredAt *: EmptyTuple
+    }
 
   private val selectUnprocessed: Query[Int, OutboxEvent] =
     sql"""

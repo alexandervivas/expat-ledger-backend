@@ -1,13 +1,16 @@
 package com.expatledger.tenants.application
 
-import java.util.UUID
-import scala.concurrent.duration.*
 import cats.effect.*
 import com.expatledger.kernel.application.EventPublisher
 import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.config.OutboxConfig
+import io.circe.Json
 import munit.CatsEffectSuite
+
+import java.time.OffsetDateTime
+import java.util.UUID
+import scala.concurrent.duration.*
 
 class OutboxPollerSpec extends CatsEffectSuite:
 
@@ -17,12 +20,14 @@ class OutboxPollerSpec extends CatsEffectSuite:
     var fetchCount = 0
 
     override def save(event: OutboxEvent): IO[Unit] = IO.unit
+
     override def fetchUnprocessed(limit: Int): IO[List[OutboxEvent]] = IO {
       fetchCount += 1
       val batch = events.take(limit)
       events = events.drop(limit)
       batch
     }
+
     override def markProcessed(ids: List[UUID]): IO[Unit] = IO {
       processedIds = processedIds ++ ids
     }
@@ -37,7 +42,9 @@ class OutboxPollerSpec extends CatsEffectSuite:
           failCount -= 1
           IO.raiseError(new Exception("Publish failed"))
         else
-          IO { publishedEvents = publishedEvents :+ event }
+          IO {
+            publishedEvents = publishedEvents :+ event
+          }
       }
 
   val config = OutboxConfig(
@@ -56,10 +63,10 @@ class OutboxPollerSpec extends CatsEffectSuite:
       aggregateType = "Test",
       aggregateId = UUID.randomUUID(),
       eventType = "TenantCreated",
-      payload = "{}",
+      payload = Json.obj("name" -> Json.fromString("Test Tenant")),
       avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:avro:schema:test",
-      occurredAt = java.time.OffsetDateTime.now()
+      occurredAt = OffsetDateTime.now()
     )
 
     outboxRepo.events = List(event)
@@ -77,8 +84,8 @@ class OutboxPollerSpec extends CatsEffectSuite:
     val outboxRepo = new MockOutboxRepository
     val publisher = new MockEventPublisher
 
-    val event1 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", "{}", Array.emptyByteArray, "urn:test:1", java.time.OffsetDateTime.now())
-    val event2 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", "{}", Array.emptyByteArray, "urn:test:2", java.time.OffsetDateTime.now())
+    val event1 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", Json.obj(), Array.emptyByteArray, "urn:test:1", OffsetDateTime.now())
+    val event2 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", Json.obj(), Array.emptyByteArray, "urn:test:2", OffsetDateTime.now())
 
     outboxRepo.events = List(event1, event2)
     publisher.failCount = 1 // Fail the first one
@@ -90,4 +97,17 @@ class OutboxPollerSpec extends CatsEffectSuite:
       assertEquals(publisher.publishedEvents.map(_.id).toSet, Set(event1.id, event2.id))
       assertEquals(outboxRepo.processedIds.toSet, Set(event1.id, event2.id))
     }
+  }
+
+  test("OutboxPoller should eventually fail if retry count exceeded") {
+    val outboxRepo = new MockOutboxRepository
+    val publisher = new MockEventPublisher
+
+    val event = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", Json.obj(), Array.emptyByteArray, "urn:test", OffsetDateTime.now())
+    outboxRepo.events = List(event)
+    publisher.failCount = 10 // Fail more times than retry count (2)
+
+    val poller = new OutboxPoller[IO](outboxRepo, publisher, config)
+
+    poller.run.take(1).compile.drain.intercept[Exception]
   }

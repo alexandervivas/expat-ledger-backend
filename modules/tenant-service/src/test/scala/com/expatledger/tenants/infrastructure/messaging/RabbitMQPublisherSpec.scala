@@ -6,6 +6,7 @@ import cats.effect.*
 import com.expatledger.kernel.domain.events.OutboxEvent
 import munit.CatsEffectSuite
 import dev.profunktor.fs2rabbit.model.AmqpMessage
+import io.circe.Json
 
 class RabbitMQPublisherSpec extends CatsEffectSuite:
 
@@ -20,7 +21,7 @@ class RabbitMQPublisherSpec extends CatsEffectSuite:
       aggregateType = "Tenant",
       aggregateId = UUID.randomUUID(),
       eventType = "TenantCreated",
-      payload = "{}",
+      payload = Json.obj("name" -> Json.fromString("Test Tenant")),
       avroPayload = expectedBytes,
       schemaUrn = "urn:test",
       occurredAt = OffsetDateTime.now()
@@ -41,7 +42,7 @@ class RabbitMQPublisherSpec extends CatsEffectSuite:
       aggregateType = "Tenant",
       aggregateId = UUID.randomUUID(),
       eventType = "TenantCreated",
-      payload = "{}",
+      payload = Json.obj("name" -> Json.fromString("Test Tenant")),
       avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:test",
       occurredAt = OffsetDateTime.now()

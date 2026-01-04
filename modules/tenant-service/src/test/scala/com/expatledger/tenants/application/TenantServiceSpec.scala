@@ -9,6 +9,8 @@ import com.expatledger.tenants.domain.model.{Tenant, TenantId}
 import com.expatledger.tenants.domain.repositories.TenantRepository
 import munit.CatsEffectSuite
 
+import java.time.OffsetDateTime
+
 class TenantServiceSpec extends CatsEffectSuite:
 
   class MockTenantRepository extends TenantRepository[IO]:
@@ -47,7 +49,7 @@ class TenantServiceSpec extends CatsEffectSuite:
       assertEquals(event.aggregateType, "Tenant")
       assertEquals(event.aggregateId, tenantId: UUID)
       assertEquals(event.eventType, "TenantCreated")
-      assert(event.payload.contains("Test Tenant"))
+      assert(event.payload.noSpaces.contains("Test Tenant"))
     }
   }
 
@@ -62,8 +64,8 @@ class TenantServiceSpec extends CatsEffectSuite:
       name = "Existing Tenant",
       reportingCurrency = com.expatledger.kernel.domain.model.Currency("EUR"),
       taxResidencies = Set.empty,
-      createdAt = java.time.OffsetDateTime.now(),
-      updatedAt = java.time.OffsetDateTime.now()
+      createdAt = OffsetDateTime.now(),
+      updatedAt = OffsetDateTime.now()
     )
     tenantRepo.tenantsById = Map(tenantId -> tenant)
 
