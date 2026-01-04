@@ -1,5 +1,153 @@
 # Scope CHANGELOG
 
+## 2026-01-04 — Optimized Outbox Serialization with Polymorphism
+
+**Summary**
+
+- Implemented polymorphic event serialization to improve efficiency and maintainability in `RabbitMQPublisher`.
+- Added `avro_payload` persistence in the `outbox` table to avoid redundant JSON-to-Avro re-serialization for events loaded from the database.
+- Introduced a registry-based polymorphic serialization mechanism using an `EventSerializer` trait and `EventType` enum.
+- Removed hardcoded pattern matching on event types in the messaging infrastructure.
+
+**Impacts**
+
+- **Performance**: Reduced CPU usage and latency during event publishing by eliminating redundant JSON decoding and Avro re-serialization.
+- **Maintainability**: New event types can now be added by implementing an `EventSerializer` and registering it, without modifying the shared messaging logic.
+- **Type Safety**: Serialization logic is now decoupled from the generic `OutboxEvent` structure.
+
+**Actions**
+
+- Created `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventSerializer.scala`.
+- Created `modules/tenant-service/src/main/scala/com/expatledger/tenants/domain/events/TenantCreatedSerializer.scala`.
+- Created `modules/tenant-service/src/test/scala/com/expatledger/tenants/infrastructure/messaging/RabbitMQPublisherTest.scala`.
+- Modified `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventType.scala` to support serializer registration.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/infrastructure/persistence/OutboxRepositoryLive.scala` to persist `avroPayload`.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/infrastructure/messaging/RabbitMQPublisher.scala` to use polymorphic serialization.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/Main.scala` to register serializers at startup.
+
+## 2026-01-04 — Adopted Manual Dependency Injection
+
+**Summary**
+
+- Discarded Google Guice in favor of **Manual Dependency Injection** orchestrated through a "Resource Tree".
+- Removed `guice` and `jakarta.inject` dependencies.
+- Refactored `TenantServiceLive` and `TenantGrpcAdapter` to use plain constructor injection without annotations.
+- Updated `Main.scala` to perform explicit component wiring within the `cats.effect.Resource` lifecycle.
+
+**Impacts**
+
+- **Type Safety**: 100% compile-time safety for dependency wiring.
+- **Resource Management**: Guaranteed cleanup of database pools and other resources.
+- **Maintainability**: Improved transparency of the dependency graph; removed reflection-based "magic".
+
+**Actions**
+
+- Created `docs/architecture/decisions/ADR-015-manual-dependency-injection.md`.
+- Updated `docs/architecture/decisions/ADR-014-google-guice-standardization.md` (marked as superseded).
+- Modified `project/Dependencies.scala` to remove Guice.
+- Refactored `Main.scala`, `TenantServiceLive.scala`, and `TenantGrpcAdapter.scala` in `tenant-service`.
+- Deleted `TenantModule.scala`.
+- Updated `docs/backlog/iteration-1.json` (T1.25 marked as done).
+
+## 2026-01-04 — Improved AvroSchemaLoader Error Handling
+
+**Summary**
+
+- Replaced generic `RuntimeException` with `java.io.FileNotFoundException` when an Avro schema file is missing in the classpath.
+- Added unit tests for `AvroSchemaLoader`.
+
+**Impacts**
+
+- **Maintainability**: Better error context for debugging missing schema files.
+- **Robustness**: Added test coverage for infrastructure messaging components.
+
+**Actions**
+
+- Modified `modules/shared-kernel/src/main/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoader.scala`.
+- Created `modules/shared-kernel/src/test/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoaderSpec.scala`.
+- Updated `docs/backlog/iteration-1.json` (TASK-15 marked as completed).
+
+## 2026-01-04 — Improved OutboxPoller retry implementation
+
+**Summary**
+
+- Refactored the recursive `retry` implementation in `OutboxPoller` to use a tail-recursive helper.
+- Improved clarity and ensured idiomatic usage of Cats Effect's `Async[F].sleep` and `flatMap`.
+
+**Impacts**
+
+- **Maintainability**: Clearer retry logic in the outbox polling mechanism.
+- **Reliability**: Ensured stack-safe and idiomatic retry behavior.
+
+**Actions**
+
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/application/OutboxPoller.scala`.
+- Updated `docs/backlog/iteration-1.json` with TASK-18.
+
+## 2026-01-04 — Refactored EventType to use Enumeratum
+
+**Summary**
+
+- Replaced hardcoded string-based `eventType` with an `enumeratum` enum `EventType`.
+- Improved type safety in `OutboxEvent` and `DomainEvent`.
+- Updated `RabbitMQPublisher` to use exhaustive pattern matching on `EventType`.
+- Implemented a Skunk codec for `EventType` to handle database persistence.
+
+**Impacts**
+
+- **Type Safety**: Reduced risk of runtime errors due to typoed event names.
+- **Maintainability**: Centralized event type definitions in `EventType` enum.
+- **Interoperability**: Maintained string-based representation for external messaging (CloudEvents) while using rich types internally.
+
+**Actions**
+
+- Added `enumeratum` and `enumeratum-circe` to `project/Dependencies.scala`.
+- Created `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventType.scala`.
+- Updated `DomainEvent` and `OutboxEvent` in `shared-kernel`.
+- Updated `RabbitMQPublisher`, `OutboxRepositoryLive`, and `TenantCreated` in `tenant-service`.
+- Fixed missing test dependencies in `apiGatewayDependencies` and `tenantServiceDependencies`.
+
+## 2026-01-03 — Outbox Poller Enhanced (Error Handling & Logging)
+
+**Summary**
+
+- Refactored `OutboxPoller` to ensure stack safety by replacing recursive restarts with fs2's `.repeat`.
+- Integrated `log4cats` with `slf4j` and `logback` for structured logging across the project.
+- Implemented exponential backoff retries for outbox event publishing.
+
+**Impacts**
+
+- **Reliability**: Improved poller stability for long-running processes; reduced risk of `StackOverflowError`.
+- **Observability**: Structured JSON-ready logging enabled.
+- **Resilience**: Added retries for transient messaging failures.
+
+**Actions**
+
+- Updated `project/Dependencies.scala` with `log4cats` and `logback`.
+- Refactored `modules/tenant-service/src/main/scala/com/expatledger/tenants/application/OutboxPoller.scala`.
+- Created `modules/tenant-service/src/test/scala/com/expatledger/tenants/application/OutboxPollerTest.scala`.
+- Updated `docs/backlog/iteration-1.json` (T1.22 marked as done).
+
+## 2026-01-03 — Pre-commit Hook Standardized
+
+**Summary**
+
+- Standardized pre-commit hook execution to use `python -m pre_commit` to support `asdf` environments.
+- Removed obsolete `google-java-format` hook (project is Scala-only).
+- Updated `README.md` and `Makefile` to reflect standardized setup.
+
+**Impacts**
+
+- **Developer Experience**: Improved first-time environment setup reliability.
+- **Repository Hygiene**: Removed unused formatting scripts and configurations.
+
+**Actions**
+
+- Updated `.pre-commit-config.yaml` (removed `google-java-format`).
+- Updated `Makefile` (standardized `lint` and `format` targets).
+- Updated `README.md` (updated prerequisites and setup instructions).
+- Updated `docs/backlog/iteration-1.json` with task T1.23.
+
 ## 2026-01-02 — Guidelines Consolidation
 
 **Summary**

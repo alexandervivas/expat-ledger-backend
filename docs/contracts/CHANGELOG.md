@@ -3,6 +3,7 @@
 This index lists the changelogs for each contract family. Update the relevant versioned file whenever a contract changes.
 
 - OpenAPI v1 — see docs/contracts/openapi/v1/CHANGELOG.md
+- gRPC v1 — see docs/contracts/grpc/v1/CHANGELOG.md
 - Events v1 — see docs/contracts/events/v1/CHANGELOG.md
 
 Notes:

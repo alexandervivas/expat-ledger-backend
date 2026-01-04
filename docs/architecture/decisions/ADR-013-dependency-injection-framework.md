@@ -19,8 +19,8 @@ Adopt **Scala 3 Contextual Abstractions** (`given`, `using`) as the primary Depe
 
 ## Consequences
 
--   **Native Experience**: No extra libraries are required for basic DI, adhering to the project's goal of using Scala-native features.
--   **Type Safety**: Errors in wiring are caught at compile-time.
--   **Testability**: Test-specific dependencies can easily be provided using local `given` instances or by passing them explicitly to constructors.
--   **Limited Auto-discovery**: Unlike some reflection-based frameworks, we must explicitly define the `given` instances in a container or module, but this improves clarity and discoverability in Hexagonal Architecture.
--   **Compatibility**: This approach is 100% compatible with the current build environment and avoids issues with sbt dependency resolution.
+- **Native Experience**: No extra libraries are required for basic DI, adhering to the project's goal of using Scala-native features.
+- **Type Safety**: Errors in wiring are caught at compile-time.
+- **Testability**: Test-specific dependencies can easily be provided using local `given` instances or by passing them explicitly to constructors.
+- **Limited Auto-discovery**: Unlike some reflection-based frameworks, we must explicitly define the `given` instances in a container or module, but this improves clarity and discoverability in Hexagonal Architecture.
+- **Compatibility**: This approach is 100% compatible with the current build environment and avoids issues with sbt dependency resolution.

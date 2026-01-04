@@ -1,4 +1,4 @@
-package com.expatledger.kernel.domain
+package com.expatledger.kernel.domain.model
 
 import io.circe.{Decoder, Encoder}
 

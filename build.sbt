@@ -1,6 +1,8 @@
 ThisBuild / scalaVersion := "3.3.5"
 ThisBuild / organization := "com.expatledger"
 ThisBuild / organizationName := "The Expat Ledger"
+ThisBuild / coverageMinimumStmtTotal := 90
+ThisBuild / coverageFailOnMinimum := true
 
 import Dependencies.*
 
@@ -32,7 +34,7 @@ lazy val apiGateway = (project in file("modules/api-gateway"))
 
 lazy val tenantService = (project in file("modules/tenant-service"))
   .dependsOn(sharedKernel)
-  .enablePlugins(JavaAppPackaging, DockerPlugin)
+  .enablePlugins(JavaAppPackaging, DockerPlugin, Fs2Grpc)
   .settings(
     name := "tenant-service",
     libraryDependencies ++= tenantServiceDependencies,

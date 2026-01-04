@@ -18,14 +18,6 @@ repos:
   # Local hooks
   - repo: local
     hooks:
-      # google-java-format via local script (no mirror)
-      - id: google-java-format
-        name: google-java-format (local jar)
-        language: system
-        entry: scripts/google-java-format.sh
-        args: ["--aosp", "--replace"]
-        files: "^modules/.+\\.java$"
-
       # Conventional Commits (local commit-msg hook)
       - id: commitlint
         name: commitlint (Conventional Commits)

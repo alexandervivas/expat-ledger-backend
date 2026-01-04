@@ -4,6 +4,7 @@ package com.expatledger.tenant.v1;
 
 service TenantService {
   rpc GetTenant (GetTenantRequest) returns (GetTenantResponse) {}
+  rpc OnboardTenant (OnboardTenantRequest) returns (OnboardTenantResponse) {}
 }
 
 message GetTenantRequest {
@@ -13,4 +14,14 @@ message GetTenantRequest {
 message GetTenantResponse {
   string id = 1;
   string name = 2;
+}
+
+message OnboardTenantRequest {
+  string name = 1;
+  string reporting_currency = 2;
+  string initial_tax_residency = 3;
+}
+
+message OnboardTenantResponse {
+  string id = 1;
 }

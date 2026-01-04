@@ -4,6 +4,8 @@ CREATE TABLE IF NOT EXISTS outbox (
     aggregate_id UUID NOT NULL,
     event_type TEXT NOT NULL,
     payload JSONB NOT NULL,
+    avro_payload BYTEA NOT NULL,
+    schema_urn TEXT NOT NULL,
     occurred_at TIMESTAMP WITH TIME ZONE NOT NULL,
     processed_at TIMESTAMP WITH TIME ZONE,
     error TEXT

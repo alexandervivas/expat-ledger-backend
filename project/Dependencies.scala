@@ -14,7 +14,13 @@ object Dependencies {
     val Postgresql  = "42.7.8"
     val PureConfig  = "0.17.9"
     val Circe       = "0.14.15"
-    val Guice       = "7.0.0"
+    val Fs2Rabbit   = "5.5.0"
+    val Avro        = "1.12.1"
+    val CloudEvents = "4.0.1"
+    val Log4cats    = "2.7.1"
+    val Logback     = "1.5.23"
+    val Enumeratum  = "1.9.2"
+    val Testcontainers = "0.44.1"
   }
 
   val catsEffect = "org.typelevel" %% "cats-effect" % Versions.CatsEffect
@@ -24,7 +30,7 @@ object Dependencies {
   val flyway     = "org.flywaydb" % "flyway-database-postgresql" % Versions.Flyway
   val postgresql = "org.postgresql" % "postgresql" % Versions.Postgresql
 
-  val pureConfig = "com.github.pureconfig" %% "pureconfig-core" % Versions.PureConfig
+  val pureConfigCore = "com.github.pureconfig" %% "pureconfig-core" % Versions.PureConfig
   val pureConfigIp4s = "com.github.pureconfig" %% "pureconfig-ip4s" % Versions.PureConfig
 
   val http4sEmberServer = "org.http4s" %% "http4s-ember-server" % Versions.Http4s
@@ -42,43 +48,46 @@ object Dependencies {
   val circeCore    = "io.circe" %% "circe-core"    % Versions.Circe
   val circeGeneric = "io.circe" %% "circe-generic" % Versions.Circe
   val circeParser  = "io.circe" %% "circe-parser"  % Versions.Circe
-  val guice        = "com.google.inject" % "guice" % Versions.Guice
+
+  val fs2Rabbit = "dev.profunktor" %% "fs2-rabbit" % Versions.Fs2Rabbit
+  val avro      = "org.apache.avro" % "avro"       % Versions.Avro
+  val cloudEventsCore = "io.cloudevents" % "cloudevents-core" % Versions.CloudEvents
+  val cloudEventsJson = "io.cloudevents" % "cloudevents-json-jackson" % Versions.CloudEvents
+
+  val log4catsCore  = "org.typelevel" %% "log4cats-core"  % Versions.Log4cats
+  val log4catsSlf4j = "org.typelevel" %% "log4cats-slf4j" % Versions.Log4cats
+  val logback       = "ch.qos.logback" % "logback-classic" % Versions.Logback
+
+  val enumeratum    = "com.beachape" %% "enumeratum" % Versions.Enumeratum
+  val enumeratumCirce = "com.beachape" %% "enumeratum-circe" % Versions.Enumeratum
+
+  val testcontainers = "com.dimafeng" %% "testcontainers-scala-munit" % Versions.Testcontainers % Test
+  val testcontainersPostgres = "com.dimafeng" %% "testcontainers-scala-postgresql" % Versions.Testcontainers % Test
+
+  val pureConfig: Seq[ModuleID] = Seq(pureConfigCore, pureConfigIp4s)
+  val http4s: Seq[ModuleID] = Seq(http4sEmberServer, http4sEmberClient, http4sDsl)
+  val tapir: Seq[ModuleID] = Seq(tapirHttp4sServer, tapirJsonCirce)
+  val circe: Seq[ModuleID] = Seq(circeCore, circeGeneric, circeParser)
+  val cloudEvents: Seq[ModuleID] = Seq(cloudEventsCore, cloudEventsJson)
+  val logging: Seq[ModuleID] = Seq(log4catsCore, log4catsSlf4j, logback)
+  val enums: Seq[ModuleID] = Seq(enumeratum, enumeratumCirce)
+  val tests: Seq[ModuleID] = Seq(munit, munitCatsEffect, testcontainers, testcontainersPostgres)
 
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
-    circeCore,
-    circeGeneric,
-    circeParser,
-    munit,
-    munitCatsEffect
-  )
+    avro
+  ) ++ circe ++ cloudEvents ++ logging ++ enums ++ tests
 
-  val apiGatewayDependencies: Seq[ModuleID] = Seq(
-    http4sEmberServer,
-    http4sEmberClient,
-    http4sDsl,
-    tapirHttp4sServer,
-    tapirJsonCirce,
-    pureConfig,
-    pureConfigIp4s,
-    munit,
-    munitCatsEffect
-  )
+  val apiGatewayDependencies: Seq[ModuleID] = pureConfig ++ http4s ++ tapir ++ tests
 
   val tenantServiceDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     grpcNettyShaded,
+    fs2Rabbit,
     skunk,
     flyway,
     postgresql,
-    pureConfig,
-    pureConfigIp4s,
-    circeCore,
-    circeGeneric,
-    circeParser,
-    guice,
-    munit,
-    munitCatsEffect
-  )
+    logback
+  ) ++ pureConfig ++ tests
 }

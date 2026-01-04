@@ -1,4 +1,4 @@
-package com.expatledger.kernel.domain
+package com.expatledger.kernel.domain.model
 
 opaque type Amount <: BigDecimal = BigDecimal
 object Amount:

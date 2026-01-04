@@ -2,16 +2,16 @@ package com.expatledger.tenants.application
 
 import cats.effect.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.{Currency, OutboxRepository}
+import com.expatledger.kernel.domain.model.Currency
+import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.domain.*
 import com.expatledger.tenants.domain.events.TenantCreated
 import com.expatledger.tenants.domain.model.{TaxResidency, Tenant, TenantId}
 import com.expatledger.tenants.domain.repositories.TenantRepository
-import jakarta.inject.Inject
 
 import java.time.{OffsetDateTime, ZoneOffset}
 
-class TenantServiceLive[F[_] : MonadCancelThrow : Sync] @Inject()(
+class TenantServiceLive[F[_] : MonadCancelThrow : Sync](
   tenantRepo: TenantRepository[F],
   outboxRepo: OutboxRepository[F],
   uow: UnitOfWork[F]
