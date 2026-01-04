@@ -18,10 +18,12 @@ class OutboxPoller[F[_]](
   private val logger: Logger[F] = Slf4jLogger.getLoggerFromName[F]("OutboxPoller")
 
   private def retry[A](fa: F[A], delay: FiniteDuration, retries: Int): F[A] =
-    fa.handleErrorWith { e =>
-      if retries > 0 then F.sleep(delay) >> retry(fa, delay * 2, retries - 1)
-      else F.raiseError(e)
-    }
+    def loop(currentDelay: FiniteDuration, remaining: Int): F[A] =
+      fa.handleErrorWith { e =>
+        if remaining > 0 then F.sleep(currentDelay) >> loop(currentDelay * 2, remaining - 1)
+        else F.raiseError(e)
+      }
+    loop(delay, retries)
 
   def run: Stream[F, Unit] =
     Stream

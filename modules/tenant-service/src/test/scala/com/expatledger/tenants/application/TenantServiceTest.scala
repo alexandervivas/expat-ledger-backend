@@ -2,7 +2,7 @@ package com.expatledger.tenants.application
 
 import java.util.UUID
 import cats.effect.*
-import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
+import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.tenants.domain.*
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.domain.model.{Tenant, TenantId}
@@ -45,7 +45,7 @@ class TenantServiceTest extends CatsEffectSuite:
       val event = outboxRepo.savedEvent.get
       assertEquals(event.aggregateType, "Tenant")
       assertEquals(event.aggregateId, tenantId: UUID)
-      assertEquals(event.eventType, EventType.TenantCreated)
+      assertEquals(event.eventType, "TenantCreated")
       assert(event.payload.contains("Test Tenant"))
     }
   }

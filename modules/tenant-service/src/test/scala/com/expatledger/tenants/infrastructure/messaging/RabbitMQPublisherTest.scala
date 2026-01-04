@@ -3,15 +3,11 @@ package com.expatledger.tenants.infrastructure.messaging
 import java.util.UUID
 import java.time.OffsetDateTime
 import cats.effect.*
-import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
-import com.expatledger.tenants.domain.events.TenantCreatedSerializer
+import com.expatledger.kernel.domain.events.OutboxEvent
 import munit.CatsEffectSuite
 import dev.profunktor.fs2rabbit.model.AmqpMessage
 
 class RabbitMQPublisherTest extends CatsEffectSuite:
-
-  override def beforeAll(): Unit =
-    EventType.TenantCreated.setSerializer(new TenantCreatedSerializer)
 
   test("RabbitMQPublisher should use avroPayload if present") {
     var capturedMessage: Option[AmqpMessage[Array[Byte]]] = None
@@ -23,9 +19,9 @@ class RabbitMQPublisherTest extends CatsEffectSuite:
       id = UUID.randomUUID(),
       aggregateType = "Tenant",
       aggregateId = UUID.randomUUID(),
-      eventType = EventType.TenantCreated,
+      eventType = "TenantCreated",
       payload = "{}",
-      avroPayload = Some(expectedBytes),
+      avroPayload = expectedBytes,
       schemaUrn = "urn:test",
       occurredAt = OffsetDateTime.now()
     )
@@ -44,7 +40,7 @@ class RabbitMQPublisherTest extends CatsEffectSuite:
     val tenantId = UUID.randomUUID()
     val eventId = UUID.randomUUID()
     val occurredAt = OffsetDateTime.now()
-    
+
     // We need a valid JSON for TenantCreated because the serializer will decode it
     val payload = s"""{
       "id": "$eventId",
@@ -59,9 +55,9 @@ class RabbitMQPublisherTest extends CatsEffectSuite:
       id = eventId,
       aggregateType = "Tenant",
       aggregateId = tenantId,
-      eventType = EventType.TenantCreated,
+      eventType = "TenantCreated",
       payload = payload,
-      avroPayload = None,
+      avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:test",
       occurredAt = occurredAt
     )

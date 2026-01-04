@@ -4,7 +4,7 @@ import java.util.UUID
 import scala.concurrent.duration.*
 import cats.effect.*
 import com.expatledger.kernel.application.EventPublisher
-import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
+import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.config.OutboxConfig
 import munit.CatsEffectSuite
@@ -53,9 +53,9 @@ class OutboxPollerTest extends CatsEffectSuite:
       id = UUID.randomUUID(),
       aggregateType = "Test",
       aggregateId = UUID.randomUUID(),
-      eventType = EventType.TenantCreated,
+      eventType = "TenantCreated",
       payload = "{}",
-      avroPayload = None,
+      avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:avro:schema:test",
       occurredAt = java.time.OffsetDateTime.now()
     )
@@ -75,8 +75,8 @@ class OutboxPollerTest extends CatsEffectSuite:
     val outboxRepo = new MockOutboxRepository
     val publisher = new MockEventPublisher
 
-    val event1 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), EventType.TenantCreated, "{}", None, "urn:test:1", java.time.OffsetDateTime.now())
-    val event2 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), EventType.TenantCreated, "{}", None, "urn:test:2", java.time.OffsetDateTime.now())
+    val event1 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", "{}", Array.emptyByteArray, "urn:test:1", java.time.OffsetDateTime.now())
+    val event2 = OutboxEvent(UUID.randomUUID(), "Test", UUID.randomUUID(), "TenantCreated", "{}", Array.emptyByteArray, "urn:test:2", java.time.OffsetDateTime.now())
 
     outboxRepo.events = List(event1, event2)
     publisher.failCount = 1 // Fail the first one

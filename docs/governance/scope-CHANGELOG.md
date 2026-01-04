@@ -17,7 +17,6 @@
 
 **Actions**
 
-- Created `modules/tenant-service/src/main/resources/db/migration/V3__Add_Avro_Payload_To_Outbox.sql`.
 - Created `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventSerializer.scala`.
 - Created `modules/tenant-service/src/main/scala/com/expatledger/tenants/domain/events/TenantCreatedSerializer.scala`.
 - Created `modules/tenant-service/src/test/scala/com/expatledger/tenants/infrastructure/messaging/RabbitMQPublisherTest.scala`.
@@ -67,6 +66,23 @@
 - Modified `modules/shared-kernel/src/main/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoader.scala`.
 - Created `modules/shared-kernel/src/test/scala/com/expatledger/kernel/infrastructure/messaging/AvroSchemaLoaderSpec.scala`.
 - Updated `docs/backlog/iteration-1.json` (TASK-15 marked as completed).
+
+## 2026-01-04 — Improved OutboxPoller retry implementation
+
+**Summary**
+
+- Refactored the recursive `retry` implementation in `OutboxPoller` to use a tail-recursive helper.
+- Improved clarity and ensured idiomatic usage of Cats Effect's `Async[F].sleep` and `flatMap`.
+
+**Impacts**
+
+- **Maintainability**: Clearer retry logic in the outbox polling mechanism.
+- **Reliability**: Ensured stack-safe and idiomatic retry behavior.
+
+**Actions**
+
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/application/OutboxPoller.scala`.
+- Updated `docs/backlog/iteration-1.json` with TASK-18.
 
 ## 2026-01-04 — Refactored EventType to use Enumeratum
 

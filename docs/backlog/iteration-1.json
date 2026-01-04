@@ -207,6 +207,14 @@
       "owner": "Junie",
       "requirement": "Technical Debt",
       "description": "Implement polymorphic event serialization using inheritance and registries to eliminate redundant decoding and hardcoded pattern matching."
+    },
+    {
+      "id": "TASK-18",
+      "title": "Improve OutboxPoller retry clarity",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt",
+      "description": "Refactor the recursive retry implementation in OutboxPoller for better clarity and to follow Cats Effect idioms."
     }
   ]
 }
