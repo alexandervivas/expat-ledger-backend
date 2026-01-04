@@ -10,7 +10,7 @@ import skunk.syntax.all.*
 
 import java.util.UUID
 
-private object OutboxRepositoryLive {
+object OutboxRepositoryLive {
 
   private val codec: Codec[OutboxEvent] =
     (uuid *: varchar *: uuid *: varchar *: varchar *: bytea *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
@@ -40,6 +40,9 @@ private object OutboxRepositoryLive {
          WHERE id IN (${uuid.list(size)})
        """.command
 
+  def make[F[_] : Sync](pool: Resource[F, Session[F]]): OutboxRepositoryLive[F] =
+    new OutboxRepositoryLive[F](pool)
+
 }
 
 class OutboxRepositoryLive[F[_] : Sync](pool: Resource[F, Session[F]]) extends OutboxRepository[F] {
@@ -47,12 +50,7 @@ class OutboxRepositoryLive[F[_] : Sync](pool: Resource[F, Session[F]]) extends O
   import OutboxRepositoryLive.*
 
   override def save(event: OutboxEvent): F[Unit] =
-    pool.use { session =>
-      for {
-        command <- session.prepare(insert)
-        _ <- command.execute(event)
-      } yield ()
-    }
+    pool.use(_.execute(insert)(event).void)
 
   override def fetchUnprocessed(limit: Int): F[List[OutboxEvent]] =
     pool.use(_.prepare(selectUnprocessed).flatMap(_.stream(limit, 1024).compile.toList))

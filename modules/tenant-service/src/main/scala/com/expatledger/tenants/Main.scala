@@ -31,7 +31,7 @@ object Main extends IOApp {
   private def loadConfig: IO[TenantServiceConfig] =
     IO.blocking(ConfigSource.default.loadOrThrow[TenantServiceConfig])
 
-  implicit val stringMessageEncoder: MessageEncoder[IO, AmqpMessage[Array[Byte]]] =
+  implicit val messageEncoder: MessageEncoder[IO, AmqpMessage[Array[Byte]]] =
     Kleisli[IO, AmqpMessage[Array[Byte]], AmqpMessage[Array[Byte]]](IO.pure)
 
   private def setupRabbitMQ(config: RabbitMQConfig): Resource[IO, RabbitClient[IO]] =
@@ -99,7 +99,7 @@ object Main extends IOApp {
 
       _ <- sessionPool(config).use { pool =>
         val tenantRepo = new TenantRepositoryLive[IO](pool)
-        val outboxRepo = new OutboxRepositoryLive[IO](pool)
+        val outboxRepo = OutboxRepositoryLive.make[IO](pool)
         val uow = new SkunkUnitOfWork[IO](pool)
         val tenantService = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow)
         val grpcService = new TenantGrpcAdapter[IO](tenantService)

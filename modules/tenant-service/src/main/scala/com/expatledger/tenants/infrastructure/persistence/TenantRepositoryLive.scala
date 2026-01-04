@@ -41,6 +41,8 @@ private object TenantRepositoryLive {
   private val selectTaxResidenciesByTenantId: Query[TenantId, String] =
     sql"SELECT country_code FROM tenant_tax_residency WHERE tenant_id = $tenantId".query(varchar(2))
 
+  def make[F[_] : Sync](pool: Resource[F, Session[F]]): TenantRepositoryLive[F] =
+    new TenantRepositoryLive[F](pool)
 }
 
 class TenantRepositoryLive[F[_] : Sync](pool: Resource[F, Session[F]]) extends TenantRepository[F] {
@@ -50,8 +52,7 @@ class TenantRepositoryLive[F[_] : Sync](pool: Resource[F, Session[F]]) extends T
   override def findById(id: TenantId): F[Option[Tenant]] =
     pool.use { session =>
       for {
-        query <- session.prepare(selectTenantById)
-        tenantOpt <- query.option(id)
+        tenantOpt <- session.option(selectTenantById)(id)
         taxResidencies <- tenantOpt.traverse(tenant => session.execute(selectTaxResidenciesByTenantId)(tenant.id))
       } yield buildTenant(tenantOpt, taxResidencies)
     }
@@ -60,10 +61,11 @@ class TenantRepositoryLive[F[_] : Sync](pool: Resource[F, Session[F]]) extends T
     val taxResidencies = tenant.taxResidencies.toList.map(tr => tenant.id *: tr.countryCode *: EmptyTuple)
     pool.use { session =>
       for {
-        tenantCommand <- session.prepare(insertTenant)
-        taxResidenciesCommand <- session.prepare(insertTaxResidencies(taxResidencies.length))
-        _ <- tenantCommand.execute(tenant)
-        _ <- if taxResidencies.nonEmpty then taxResidenciesCommand.execute(taxResidencies).void else Sync[F].unit
+        - <- session.execute(insertTenant)(tenant)
+        _ <- if taxResidencies.nonEmpty then session
+          .prepare(insertTaxResidencies(taxResidencies.length))
+          .flatMap(command => command.execute(taxResidencies).void)
+        else Sync[F].unit
       } yield ()
     }
   }
