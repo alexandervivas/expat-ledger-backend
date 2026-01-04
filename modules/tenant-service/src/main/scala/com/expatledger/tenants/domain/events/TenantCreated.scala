@@ -1,7 +1,7 @@
 package com.expatledger.tenants.domain.events
 
-import com.expatledger.kernel.domain.events.{DomainEvent, EventType, OutboxEvent}
-import com.expatledger.kernel.infrastructure.messaging.AvroSchemaLoader
+import com.expatledger.kernel.domain.events.{DomainEvent, OutboxEvent}
+import com.expatledger.kernel.infrastructure.messaging.{AvroSchemaLoader, AvroSerializer}
 import com.expatledger.tenants.domain.model.Tenant
 import io.circe.Codec as CirceCodec
 import io.circe.generic.semiauto.*
@@ -20,9 +20,9 @@ case class TenantCreated(
     taxResidencies: List[String],
     override val occurredAt: OffsetDateTime
 ) extends DomainEvent:
-  override def eventType: EventType = EventType.TenantCreated
+  override def eventType: String = "TenantCreated"
   override def aggregateType: String = "Tenant"
-  override def schemaUrn: String = s"urn:avro:schema:com.expatledger.events.v1.${eventType.entryName}"
+  override def schemaUrn: String = s"urn:avro:schema:com.expatledger.events.v1.$eventType"
 
   override def toOutboxEvent: OutboxEvent =
     OutboxEvent(
@@ -31,6 +31,7 @@ case class TenantCreated(
       aggregateId = aggregateId,
       eventType = eventType,
       payload = this.asJson.noSpaces,
+      avroPayload = AvroSerializer.serialize(toAvroRecord, avroSchema),
       occurredAt = occurredAt,
       schemaUrn = schemaUrn
     )

@@ -199,6 +199,14 @@
       "status": "completed",
       "owner": "Junie",
       "requirement": "Technical Debt"
+    },
+    {
+      "id": "TASK-17",
+      "title": "Polymorphic Outbox Serialization",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Technical Debt",
+      "description": "Implement polymorphic event serialization using inheritance and registries to eliminate redundant decoding and hardcoded pattern matching."
     }
   ]
 }

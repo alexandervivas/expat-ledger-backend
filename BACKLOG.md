@@ -42,4 +42,5 @@
 | TASK-14 | Refactor EventType to use Enumeratum | ⏳ Todo | Junie |
 | TASK-15 | Improve AvroSchemaLoader error handling | ⏳ Todo | Junie |
 | TASK-16 | Make OutboxPoller retry parameters configurable | ⏳ Todo | Junie |
+| TASK-17 | Polymorphic Outbox Serialization | ⏳ Todo | Junie |
 

@@ -5,10 +5,7 @@ import com.expatledger.kernel.infrastructure.messaging.CloudEventHeaderBuilder
 import cats.effect.Sync
 import dev.profunktor.fs2rabbit.model.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
-import io.circe.parser.decode
-import com.expatledger.tenants.domain.events.TenantCreated
-import com.expatledger.kernel.infrastructure.messaging.AvroSerializer
+import com.expatledger.kernel.domain.events.OutboxEvent
 
 class RabbitMQPublisher[F[_]: Sync](
     publisher: AmqpMessage[Array[Byte]] => F[Unit]
@@ -16,7 +13,7 @@ class RabbitMQPublisher[F[_]: Sync](
 
   override def publish(event: OutboxEvent): F[Unit] =
     for {
-      avroBytes <- Sync[F].delay(serializePayload(event))
+      avroBytes <- Sync[F].delay(event.avroPayload)
       headers = CloudEventHeaderBuilder.buildHeaders(event, "tenants-service")
       props = AmqpProperties.empty.copy(
         headers = headers,
@@ -25,10 +22,3 @@ class RabbitMQPublisher[F[_]: Sync](
       )
       _ <- publisher(AmqpMessage(avroBytes, props))
     } yield ()
-
-  private def serializePayload(event: OutboxEvent): Array[Byte] =
-    event.eventType match
-      case EventType.TenantCreated =>
-        decode[TenantCreated](event.payload) match
-          case Right(tc) => AvroSerializer.serialize(tc.toAvroRecord, tc.avroSchema)
-          case Left(err) => throw new RuntimeException(s"Failed to decode TenantCreated: $err")

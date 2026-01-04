@@ -2,7 +2,7 @@ package com.expatledger.tenants.infrastructure.persistence
 
 import cats.effect.*
 import cats.syntax.all.*
-import com.expatledger.kernel.domain.events.{OutboxEvent, EventType}
+import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.kernel.domain.repositories.OutboxRepository
 import skunk.*
 import skunk.codec.all.*
@@ -11,23 +11,22 @@ import skunk.syntax.all.*
 import java.util.UUID
 
 private object OutboxRepositoryLive {
-  private val eventType: Codec[EventType] = varchar.imap(EventType.withName)(_.entryName)
 
   private val codec: Codec[OutboxEvent] =
-    (uuid *: varchar *: uuid *: eventType *: varchar *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
-      case id *: aggregateType *: aggregateId *: eventType *: payload *: schemaUrn *: occurredAt *: EmptyTuple =>
-        OutboxEvent(id, aggregateType, aggregateId, eventType, payload, schemaUrn, occurredAt)
-    }(outboxEvent => outboxEvent.id *: outboxEvent.aggregateType *: outboxEvent.aggregateId *: outboxEvent.eventType *: outboxEvent.payload *: outboxEvent.schemaUrn *: outboxEvent.occurredAt *: EmptyTuple)
+    (uuid *: varchar *: uuid *: varchar *: varchar *: bytea *: varchar *: timestamptz *: EmptyTuple).tupled.imap {
+      case id *: aggregateType *: aggregateId *: eventType *: payload *: avroPayload *: schemaUrn *: occurredAt *: EmptyTuple =>
+        OutboxEvent(id, aggregateType, aggregateId, eventType, payload, avroPayload, schemaUrn, occurredAt)
+    }(outboxEvent => outboxEvent.id *: outboxEvent.aggregateType *: outboxEvent.aggregateId *: outboxEvent.eventType *: outboxEvent.payload *: outboxEvent.avroPayload *: outboxEvent.schemaUrn *: outboxEvent.occurredAt *: EmptyTuple)
 
   private val insert: Command[OutboxEvent] =
     sql"""
-         INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload, schema_urn, occurred_at)
+         INSERT INTO outbox (id, aggregate_type, aggregate_id, event_type, payload, avro_payload, schema_urn, occurred_at)
          VALUES $codec
        """.command
 
   private val selectUnprocessed: Query[Int, OutboxEvent] =
     sql"""
-         SELECT id, aggregate_type, aggregate_id, event_type, payload, schema_urn, occurred_at
+         SELECT id, aggregate_type, aggregate_id, event_type, payload, avro_payload, schema_urn, occurred_at
          FROM outbox
          WHERE processed_at IS NULL
          ORDER BY occurred_at ASC

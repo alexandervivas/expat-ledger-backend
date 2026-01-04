@@ -7,8 +7,9 @@ case class OutboxEvent(
     override val id: UUID,
     aggregateType: String,
     override val aggregateId: UUID,
-    eventType: EventType,
+    eventType: String,
     payload: String, // Serialized JSON
+    avroPayload: Array[Byte],
     schemaUrn: String,
     override val occurredAt: OffsetDateTime
 ) extends Event

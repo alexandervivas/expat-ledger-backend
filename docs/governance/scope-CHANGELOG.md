@@ -1,5 +1,31 @@
 # Scope CHANGELOG
 
+## 2026-01-04 — Optimized Outbox Serialization with Polymorphism
+
+**Summary**
+
+- Implemented polymorphic event serialization to improve efficiency and maintainability in `RabbitMQPublisher`.
+- Added `avro_payload` persistence in the `outbox` table to avoid redundant JSON-to-Avro re-serialization for events loaded from the database.
+- Introduced a registry-based polymorphic serialization mechanism using an `EventSerializer` trait and `EventType` enum.
+- Removed hardcoded pattern matching on event types in the messaging infrastructure.
+
+**Impacts**
+
+- **Performance**: Reduced CPU usage and latency during event publishing by eliminating redundant JSON decoding and Avro re-serialization.
+- **Maintainability**: New event types can now be added by implementing an `EventSerializer` and registering it, without modifying the shared messaging logic.
+- **Type Safety**: Serialization logic is now decoupled from the generic `OutboxEvent` structure.
+
+**Actions**
+
+- Created `modules/tenant-service/src/main/resources/db/migration/V3__Add_Avro_Payload_To_Outbox.sql`.
+- Created `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventSerializer.scala`.
+- Created `modules/tenant-service/src/main/scala/com/expatledger/tenants/domain/events/TenantCreatedSerializer.scala`.
+- Created `modules/tenant-service/src/test/scala/com/expatledger/tenants/infrastructure/messaging/RabbitMQPublisherTest.scala`.
+- Modified `modules/shared-kernel/src/main/scala/com/expatledger/kernel/domain/events/EventType.scala` to support serializer registration.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/infrastructure/persistence/OutboxRepositoryLive.scala` to persist `avroPayload`.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/infrastructure/messaging/RabbitMQPublisher.scala` to use polymorphic serialization.
+- Modified `modules/tenant-service/src/main/scala/com/expatledger/tenants/Main.scala` to register serializers at startup.
+
 ## 2026-01-04 — Adopted Manual Dependency Injection
 
 **Summary**
