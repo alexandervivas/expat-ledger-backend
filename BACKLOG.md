@@ -45,3 +45,4 @@
 | TASK-17 | Polymorphic Outbox Serialization                                    | ⏳ Todo | Junie |
 | TASK-18 | Improve OutboxPoller retry clarity                                  | ⏳ Todo | Junie |
 | TASK-19 | Make RabbitMQ SSL configurable                                      | ⏳ Todo | Junie |
+| TASK-20 | Enforce 90% Test Coverage                                           | ⏳ Todo | Junie |

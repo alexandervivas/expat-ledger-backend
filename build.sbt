@@ -1,6 +1,8 @@
 ThisBuild / scalaVersion := "3.3.5"
 ThisBuild / organization := "com.expatledger"
 ThisBuild / organizationName := "The Expat Ledger"
+ThisBuild / coverageMinimumStmtTotal := 90
+ThisBuild / coverageFailOnMinimum := true
 
 import Dependencies.*
 

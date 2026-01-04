@@ -223,6 +223,14 @@
       "owner": "Junie",
       "requirement": "Security",
       "description": "Add ssl field to RabbitMQConfig and load it from application.conf to allow secure connections in production environments."
+    },
+    {
+      "id": "TASK-20",
+      "title": "Enforce 90% Test Coverage",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Quality Standards",
+      "description": "Integrated sbt-scoverage, set 90% threshold in build.sbt, and created CI workflow to enforce coverage on PRs."
     }
   ]
 }
