@@ -41,4 +41,20 @@ class MoneySpec extends FunSuite {
     val c = Currency("usd")
     assertEquals(c: String, "USD")
   }
+
+  test("Currency codec") {
+    import io.circe.syntax.*
+    val c = Currency("eur")
+    val json = c.asJson.noSpaces
+    assertEquals(json, "\"EUR\"")
+    val decoded = io.circe.parser.decode[Currency](json)
+    assertEquals(decoded, Right(c))
+  }
+
+  test("Amount fromDouble and fromLong") {
+    val a1 = Amount.fromDouble(100.5)
+    assertEquals(a1: BigDecimal, BigDecimal(100.50).setScale(2))
+    val a2 = Amount.fromLong(100)
+    assertEquals(a2: BigDecimal, BigDecimal(100.00).setScale(2))
+  }
 }

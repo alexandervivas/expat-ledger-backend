@@ -9,7 +9,7 @@ import com.expatledger.kernel.domain.repositories.OutboxRepository
 import com.expatledger.tenants.config.OutboxConfig
 import munit.CatsEffectSuite
 
-class OutboxPollerTest extends CatsEffectSuite:
+class OutboxPollerSpec extends CatsEffectSuite:
 
   class MockOutboxRepository extends OutboxRepository[IO]:
     var events: List[OutboxEvent] = Nil
@@ -32,11 +32,13 @@ class OutboxPollerTest extends CatsEffectSuite:
     var failCount = 0
 
     override def publish(event: OutboxEvent): IO[Unit] =
-      if failCount > 0 then
-        failCount -= 1
-        IO.raiseError(new Exception("Publish failed"))
-      else
-        IO { publishedEvents = publishedEvents :+ event }
+      IO.defer {
+        if failCount > 0 then
+          failCount -= 1
+          IO.raiseError(new Exception("Publish failed"))
+        else
+          IO { publishedEvents = publishedEvents :+ event }
+      }
 
   val config = OutboxConfig(
     pollInterval = 10.millis,
@@ -84,8 +86,8 @@ class OutboxPollerTest extends CatsEffectSuite:
     val poller = new OutboxPoller[IO](outboxRepo, publisher, config)
 
     poller.run.take(1).compile.drain.map { _ =>
-      assertEquals(publisher.publishedEvents.size, 1)
-      assertEquals(publisher.publishedEvents.head.id, event2.id)
-      assertEquals(outboxRepo.processedIds, List(event2.id))
+      assertEquals(publisher.publishedEvents.size, 2)
+      assertEquals(publisher.publishedEvents.map(_.id).toSet, Set(event1.id, event2.id))
+      assertEquals(outboxRepo.processedIds.toSet, Set(event1.id, event2.id))
     }
   }

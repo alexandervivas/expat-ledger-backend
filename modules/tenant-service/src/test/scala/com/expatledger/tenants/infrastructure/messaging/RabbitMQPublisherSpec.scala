@@ -7,7 +7,7 @@ import com.expatledger.kernel.domain.events.OutboxEvent
 import munit.CatsEffectSuite
 import dev.profunktor.fs2rabbit.model.AmqpMessage
 
-class RabbitMQPublisherTest extends CatsEffectSuite:
+class RabbitMQPublisherSpec extends CatsEffectSuite:
 
   test("RabbitMQPublisher should use avroPayload if present") {
     var capturedMessage: Option[AmqpMessage[Array[Byte]]] = None
@@ -28,7 +28,7 @@ class RabbitMQPublisherTest extends CatsEffectSuite:
 
     rabbitPublisher.publish(event).map { _ =>
       assert(capturedMessage.isDefined)
-      assertEquals(capturedMessage.get.payload, expectedBytes)
+      assertEquals(capturedMessage.get.payload.toList, expectedBytes.toList)
     }
   }
 

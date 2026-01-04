@@ -9,12 +9,13 @@ import com.expatledger.tenants.domain.model.{Tenant, TenantId}
 import com.expatledger.tenants.domain.repositories.TenantRepository
 import munit.CatsEffectSuite
 
-class TenantServiceTest extends CatsEffectSuite:
+class TenantServiceSpec extends CatsEffectSuite:
 
   class MockTenantRepository extends TenantRepository[IO]:
     var savedTenant: Option[Tenant] = None
+    var tenantsById: Map[TenantId, Tenant] = Map.empty
     override def save(tenant: Tenant): IO[Unit] = IO { savedTenant = Some(tenant) }
-    override def findById(id: TenantId): IO[Option[Tenant]] = IO.none
+    override def findById(id: TenantId): IO[Option[Tenant]] = IO.pure(tenantsById.get(id))
 
   class MockOutboxRepository extends OutboxRepository[IO]:
     var savedEvent: Option[OutboxEvent] = None
@@ -47,5 +48,28 @@ class TenantServiceTest extends CatsEffectSuite:
       assertEquals(event.aggregateId, tenantId: UUID)
       assertEquals(event.eventType, "TenantCreated")
       assert(event.payload.contains("Test Tenant"))
+    }
+  }
+
+  test("getTenant should return tenant from repository") {
+    val tenantRepo = new MockTenantRepository
+    val outboxRepo = new MockOutboxRepository
+    val uow = new MockUnitOfWork
+
+    val tenantId = TenantId.generate
+    val tenant = Tenant(
+      id = tenantId,
+      name = "Existing Tenant",
+      reportingCurrency = com.expatledger.kernel.domain.model.Currency("EUR"),
+      taxResidencies = Set.empty,
+      createdAt = java.time.OffsetDateTime.now(),
+      updatedAt = java.time.OffsetDateTime.now()
+    )
+    tenantRepo.tenantsById = Map(tenantId -> tenant)
+
+    val service = new TenantServiceLive[IO](tenantRepo, outboxRepo, uow)
+
+    service.getTenant(tenantId).map { result =>
+      assertEquals(result, Some(tenant))
     }
   }
