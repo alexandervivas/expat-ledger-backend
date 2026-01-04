@@ -32,38 +32,24 @@ class RabbitMQPublisherTest extends CatsEffectSuite:
     }
   }
 
-  test("RabbitMQPublisher should fallback to polymorphic serialization if avroPayload is missing") {
-    var capturedMessage: Option[AmqpMessage[Array[Byte]]] = None
-    val publisherFunc: AmqpMessage[Array[Byte]] => IO[Unit] = msg => IO { capturedMessage = Some(msg) }
+  test("RabbitMQPublisher should fail if avroPayload is missing (fallback not implemented)") {
+    val publisherFunc: AmqpMessage[Array[Byte]] => IO[Unit] = _ => IO.unit
     val rabbitPublisher = new RabbitMQPublisher[IO](publisherFunc)
 
-    val tenantId = UUID.randomUUID()
-    val eventId = UUID.randomUUID()
-    val occurredAt = OffsetDateTime.now()
-
-    // We need a valid JSON for TenantCreated because the serializer will decode it
-    val payload = s"""{
-      "id": "$eventId",
-      "aggregateId": "$tenantId",
-      "name": "Test Tenant",
-      "reportingCurrency": "USD",
-      "taxResidencies": [],
-      "occurredAt": "${occurredAt.toString}"
-    }"""
-
     val event = OutboxEvent(
-      id = eventId,
+      id = UUID.randomUUID(),
       aggregateType = "Tenant",
-      aggregateId = tenantId,
+      aggregateId = UUID.randomUUID(),
       eventType = "TenantCreated",
-      payload = payload,
+      payload = "{}",
       avroPayload = Array.emptyByteArray,
       schemaUrn = "urn:test",
-      occurredAt = occurredAt
+      occurredAt = OffsetDateTime.now()
     )
 
-    rabbitPublisher.publish(event).map { _ =>
-      assert(capturedMessage.isDefined)
-      assert(capturedMessage.get.payload.length > 0)
+    interceptIO[IllegalStateException] {
+      rabbitPublisher.publish(event)
+    }.map { ex =>
+      assert(ex.getMessage.contains("fallback serialization is not implemented"))
     }
   }

@@ -5,6 +5,7 @@ import com.expatledger.kernel.application.EventPublisher
 import com.expatledger.kernel.domain.events.OutboxEvent
 import com.expatledger.kernel.infrastructure.messaging.CloudEventHeaderBuilder
 import dev.profunktor.fs2rabbit.model.*
+import dev.profunktor.fs2rabbit.model.AmqpFieldValue.StringVal
 
 class RabbitMQPublisher[F[_]: Sync](
     publisher: AmqpMessage[Array[Byte]] => F[Unit]
@@ -16,9 +17,12 @@ class RabbitMQPublisher[F[_]: Sync](
         new IllegalStateException(s"Event ${event.id} has an empty avroPayload and fallback serialization is not implemented.")
       )
     } else {
-      val headers = CloudEventHeaderBuilder.buildHeaders(event, "tenants-service")
+      val rawHeaders = CloudEventHeaderBuilder.buildHeaders(event, "tenants-service")
+      val amqpHeaders = Headers(rawHeaders.map { (k, v) =>
+        k -> (StringVal(v): AmqpFieldValue)
+      })
       val props = AmqpProperties.empty.copy(
-        headers = headers,
+        headers = amqpHeaders,
         contentEncoding = Some("UTF-8"),
         contentType = Some("application/avro")
       )

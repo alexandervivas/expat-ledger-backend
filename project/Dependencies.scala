@@ -72,7 +72,6 @@ object Dependencies {
   val sharedKernelDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     ip4s,
-    fs2Rabbit,
     avro
   ) ++ circe ++ cloudEvents ++ logging ++ enums ++ tests
 
@@ -81,6 +80,7 @@ object Dependencies {
   val tenantServiceDependencies: Seq[ModuleID] = Seq(
     catsEffect,
     grpcNettyShaded,
+    fs2Rabbit,
     skunk,
     flyway,
     postgresql,
