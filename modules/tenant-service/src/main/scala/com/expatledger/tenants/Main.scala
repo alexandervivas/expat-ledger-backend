@@ -31,6 +31,9 @@ object Main extends IOApp {
   private def loadConfig: IO[TenantServiceConfig] =
     IO.blocking(ConfigSource.default.loadOrThrow[TenantServiceConfig])
 
+  // Identity MessageEncoder for AmqpMessage[Array[Byte]]
+  // This is required by fs2-rabbit to publish messages. Since we already have the payload as an Array[Byte],
+  // no further encoding is necessary.
   implicit val messageEncoder: MessageEncoder[IO, AmqpMessage[Array[Byte]]] =
     Kleisli[IO, AmqpMessage[Array[Byte]], AmqpMessage[Array[Byte]]](IO.pure)
 
@@ -40,7 +43,7 @@ object Main extends IOApp {
       port = config.port,
       virtualHost = config.virtualHost,
       connectionTimeout = 3.seconds,
-      ssl = false,
+      ssl = config.ssl,
       username = Some(config.user),
       password = config.password,
       requeueOnNack = false,

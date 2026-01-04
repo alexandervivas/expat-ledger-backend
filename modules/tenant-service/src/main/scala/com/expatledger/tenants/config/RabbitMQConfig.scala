@@ -8,6 +8,7 @@ case class RabbitMQConfig(
     virtualHost: String,
     user: String,
     password: Option[String],
+    ssl: Boolean,
     exchange: String,
     routingKey: String
 ) derives ConfigReader

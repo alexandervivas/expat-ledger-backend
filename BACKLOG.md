@@ -44,3 +44,4 @@
 | TASK-16 | Make OutboxPoller retry parameters configurable                     | ⏳ Todo | Junie |
 | TASK-17 | Polymorphic Outbox Serialization                                    | ⏳ Todo | Junie |
 | TASK-18 | Improve OutboxPoller retry clarity                                  | ⏳ Todo | Junie |
+| TASK-19 | Make RabbitMQ SSL configurable                                      | ⏳ Todo | Junie |

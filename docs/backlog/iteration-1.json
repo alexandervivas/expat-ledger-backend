@@ -215,6 +215,14 @@
       "owner": "Junie",
       "requirement": "Technical Debt",
       "description": "Refactor the recursive retry implementation in OutboxPoller for better clarity and to follow Cats Effect idioms."
+    },
+    {
+      "id": "TASK-19",
+      "title": "Make RabbitMQ SSL configurable",
+      "status": "completed",
+      "owner": "Junie",
+      "requirement": "Security",
+      "description": "Add ssl field to RabbitMQConfig and load it from application.conf to allow secure connections in production environments."
     }
   ]
 }
