@@ -76,7 +76,7 @@ object Dependencies {
     avro
   ) ++ circe ++ cloudEvents ++ logging ++ enums ++ tests
 
-  val apiGatewayDependencies: Seq[ModuleID] = pureConfig ++ http4s ++ tapir
+  val apiGatewayDependencies: Seq[ModuleID] = pureConfig ++ http4s ++ tapir ++ tests
 
   val tenantServiceDependencies: Seq[ModuleID] = Seq(
     catsEffect,
